@@ -9,8 +9,6 @@ import budget.control.project.service.RevenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class RevenueServiceImpl implements RevenueService {
     @Autowired
@@ -18,9 +16,7 @@ public class RevenueServiceImpl implements RevenueService {
 
     @Override
     public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
-        List<Revenue> revenues = repository.findByDescriptionAndDate(revenueDTORequest.getDescription(), revenueDTORequest.getDate());
-
-        if (!revenues.isEmpty()) {
+        if (repository.findByDescriptionAndDate(revenueDTORequest.getDescription(), revenueDTORequest.getDate()) != null) {
             throw new DuplicateRevenueException("Duplicate entries with an existing description and month are not allowed");
         }
 
