@@ -7,7 +7,10 @@ import budget.control.project.model.Revenue;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RevenueServiceImpl implements RevenueService {
@@ -23,5 +26,12 @@ public class RevenueServiceImpl implements RevenueService {
         Revenue revenue = repository.save(new Revenue(revenueDTORequest));
 
         return new RevenueDTOResponse(revenue);
+    }
+
+    @Override
+    public List<RevenueDTOResponse> getAll(Pageable pageable) {
+        return repository.findAll(pageable).stream()
+                .map(RevenueDTOResponse::new)
+                .toList();
     }
 }
