@@ -29,4 +29,9 @@ public class RevenueController {
     public ResponseEntity<List<RevenueDTOResponse>> getAll(@PageableDefault(size = 10, sort = {"date"}) Pageable pageable) {
         return new ResponseEntity<>(revenueService.getAll(pageable), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RevenueDTOResponse> put(@RequestBody @Valid RevenueDTORequest revenueDTORequest, @PathVariable Long id) {
+        return new ResponseEntity<>(revenueService.put(revenueDTORequest, id), HttpStatus.CREATED);
+    }
 }

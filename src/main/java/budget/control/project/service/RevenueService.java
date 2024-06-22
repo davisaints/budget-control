@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface RevenueService {
     RevenueDTOResponse post(RevenueDTORequest revenueDTORequest);
-    
+
     List<RevenueDTOResponse> getAll(Pageable pageable);
+
+    RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id);
 }
