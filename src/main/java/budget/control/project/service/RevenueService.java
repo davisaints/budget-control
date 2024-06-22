@@ -12,4 +12,6 @@ public interface RevenueService {
     List<RevenueDTOResponse> getAll(Pageable pageable);
 
     RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id);
+
+    void delete(Long id);
 }
