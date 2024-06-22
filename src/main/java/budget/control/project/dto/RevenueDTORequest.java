@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import java.time.LocalDate;
 
 public class RevenueDTORequest {
+
     @NotEmpty @Length(min = 2)
     String description;
     @DecimalMin(value = "0.50")

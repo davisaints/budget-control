@@ -8,5 +8,7 @@ import java.time.LocalDate;
 
 @Repository
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {
+
     Revenue findByDescriptionAndDate(String description, LocalDate date);
+
 }

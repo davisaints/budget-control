@@ -17,12 +17,15 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping(value = "revenues")
 public class RevenueController {
+
     @Autowired
     RevenueService revenueService;
 
-    @PostMapping
-    public ResponseEntity<RevenueDTOResponse> postRevenue(@RequestBody @Valid RevenueDTORequest revenueDTORequest) {
-        return new ResponseEntity<>(revenueService.post(revenueDTORequest), HttpStatus.CREATED);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        revenueService.delete(id);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -30,15 +33,13 @@ public class RevenueController {
         return new ResponseEntity<>(revenueService.getAll(pageable), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<RevenueDTOResponse> postRevenue(@RequestBody @Valid RevenueDTORequest revenueDTORequest) {
+        return new ResponseEntity<>(revenueService.post(revenueDTORequest), HttpStatus.CREATED);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<RevenueDTOResponse> put(@RequestBody @Valid RevenueDTORequest revenueDTORequest, @PathVariable Long id) {
         return new ResponseEntity<>(revenueService.put(revenueDTORequest, id), HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        revenueService.delete(id);
-
-        return ResponseEntity.ok().build();
     }
 }

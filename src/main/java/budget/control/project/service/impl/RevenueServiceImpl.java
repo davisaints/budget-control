@@ -15,8 +15,24 @@ import java.util.List;
 
 @Service
 public class RevenueServiceImpl implements RevenueService {
+
     @Autowired
     private RevenueRepository repository;
+
+    @Override
+    public void delete(Long id) {
+        Revenue revenue = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
+
+        repository.delete(revenue);
+    }
+
+    @Override
+    public List<RevenueDTOResponse> getAll(Pageable pageable) {
+        return repository.findAll(pageable).stream()
+                .map(RevenueDTOResponse::new)
+                .toList();
+    }
 
     @Override
     public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
@@ -27,13 +43,6 @@ public class RevenueServiceImpl implements RevenueService {
         Revenue revenue = repository.save(new Revenue(revenueDTORequest));
 
         return new RevenueDTOResponse(revenue);
-    }
-
-    @Override
-    public List<RevenueDTOResponse> getAll(Pageable pageable) {
-        return repository.findAll(pageable).stream()
-                .map(RevenueDTOResponse::new)
-                .toList();
     }
 
     @Override
@@ -50,11 +59,4 @@ public class RevenueServiceImpl implements RevenueService {
         return new RevenueDTOResponse(revenue);
     }
 
-    @Override
-    public void delete(Long id) {
-        Revenue revenue = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
-
-        repository.delete(revenue);
-    }
 }
