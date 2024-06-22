@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 import java.time.LocalDate;
 
 public class RevenueDTORequest {
-    Long id;
     @NotEmpty @Length(min = 2)
     String description;
     @DecimalMin(value = "0.50")
@@ -20,10 +19,6 @@ public class RevenueDTORequest {
         this.description = description;
         this.amount = amount;
         this.date = date;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getDescription() {
