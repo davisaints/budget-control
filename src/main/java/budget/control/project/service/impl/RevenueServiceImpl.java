@@ -49,4 +49,12 @@ public class RevenueServiceImpl implements RevenueService {
 
         return new RevenueDTOResponse(revenue);
     }
+
+    @Override
+    public void delete(Long id) {
+        Revenue revenue = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
+
+        repository.delete(revenue);
+    }
 }

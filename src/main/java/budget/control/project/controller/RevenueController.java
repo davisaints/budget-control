@@ -34,4 +34,11 @@ public class RevenueController {
     public ResponseEntity<RevenueDTOResponse> put(@RequestBody @Valid RevenueDTORequest revenueDTORequest, @PathVariable Long id) {
         return new ResponseEntity<>(revenueService.put(revenueDTORequest, id), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        revenueService.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
 }
