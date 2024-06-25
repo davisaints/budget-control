@@ -27,6 +27,11 @@ public class RevenueController {
 
         return ResponseEntity.ok().build();
     }
+  
+    @GetMapping("/{id}")
+    public ResponseEntity<RevenueDTOResponse> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(revenueService.getById(id), HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<RevenueDTOResponse>> getAll(@PageableDefault(size = 10, sort = {"date"}) Pageable pageable) {
