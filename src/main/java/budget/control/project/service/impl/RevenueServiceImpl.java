@@ -35,6 +35,14 @@ public class RevenueServiceImpl implements RevenueService {
     }
 
     @Override
+    public RevenueDTOResponse getById(Long id) {
+        Revenue revenue = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
+
+        return new RevenueDTOResponse(revenue);
+    }
+
+    @Override
     public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
         if (repository.findByDescriptionAndDate(revenueDTORequest.getDescription(), revenueDTORequest.getDate()) != null) {
             throw new DuplicateRevenueException("Duplicate entries with an existing description and month are not allowed");

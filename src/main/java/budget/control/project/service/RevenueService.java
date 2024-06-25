@@ -10,6 +10,8 @@ public interface RevenueService {
 
     void delete(Long id);
 
+    RevenueDTOResponse getById(Long id);
+
     List<RevenueDTOResponse> getAll(Pageable pageable);
 
     RevenueDTOResponse post(RevenueDTORequest revenueDTORequest);
