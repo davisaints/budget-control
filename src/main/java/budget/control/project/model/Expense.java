@@ -1,6 +1,6 @@
 package budget.control.project.model;
 
-import budget.control.project.dto.expense.ExpenseDTORequest;
+import budget.control.project.dto.ExpenseDTORequest;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -59,6 +59,5 @@ public class Expense {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 }
