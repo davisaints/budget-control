@@ -1,6 +1,6 @@
 package budget.control.project.model;
 
-import budget.control.project.dto.RevenueDTORequest;
+import budget.control.project.dto.expense.ExpenseDTORequest;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,10 +20,10 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Expense(RevenueDTORequest revenueDTORequest) {
-        this.amount = revenueDTORequest.getAmount();
-        this.date = revenueDTORequest.getDate();
-        this.description = revenueDTORequest.getDescription();
+    public Expense(ExpenseDTORequest expenseDTORequest) {
+        this.amount = expenseDTORequest.getAmount();
+        this.date = expenseDTORequest.getDate();
+        this.description = expenseDTORequest.getDescription();
     }
 
     public Expense(double amount, LocalDate date, String description) {
