@@ -1,6 +1,6 @@
 package budget.control.project.dto;
 
-import budget.control.project.model.Revenue;
+import budget.control.project.model.Expense;
 
 import java.time.LocalDate;
 
@@ -10,10 +10,10 @@ public class ExpenseDTOResponse {
     LocalDate date;
     String description;
 
-    public ExpenseDTOResponse(Revenue revenue) {
-        this.amount = revenue.getAmount();
-        this.date = revenue.getDate();
-        this.description = revenue.getDescription();
+    public ExpenseDTOResponse(Expense expense) {
+        this.amount = expense.getAmount();
+        this.date = expense.getDate();
+        this.description = expense.getDescription();
     }
 
     public double getAmount() {
