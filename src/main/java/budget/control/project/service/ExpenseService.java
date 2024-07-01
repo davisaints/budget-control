@@ -11,6 +11,8 @@ public interface ExpenseService {
 
     List<ExpenseDTOResponse> getAll(Pageable pageable);
 
+    ExpenseDTOResponse getById(Long id);
+
     ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) throws DuplicateExpenseException;
 
 }
