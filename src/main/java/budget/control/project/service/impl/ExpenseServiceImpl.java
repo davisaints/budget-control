@@ -6,6 +6,7 @@ import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Expense;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         return repository.findAll(pageable).stream()
                 .map(ExpenseDTOResponse::new)
                 .toList();
+    }
+
+    @Override
+    public ExpenseDTOResponse getById(Long id) {
+        Expense expense = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
+
+        return new ExpenseDTOResponse(expense);
     }
 
     @Override
