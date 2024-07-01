@@ -7,13 +7,23 @@ import budget.control.project.model.Expense;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
     ExpenseRepository repository;
+
+    @Override
+    public List<ExpenseDTOResponse> getAll(Pageable pageable) {
+        return repository.findAll(pageable).stream()
+                .map(ExpenseDTOResponse::new)
+                .toList();
+    }
 
     @Override
     public ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) {
@@ -25,5 +35,5 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return new ExpenseDTOResponse(expense);
     }
-    
+
 }
