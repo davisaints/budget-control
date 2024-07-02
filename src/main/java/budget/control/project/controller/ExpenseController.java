@@ -21,6 +21,13 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        expenseService.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<ExpenseDTOResponse>> getAll(@PageableDefault(size = 10, sort = {"date"}) Pageable pageable) {
         return new ResponseEntity<>(expenseService.getAll(pageable), HttpStatus.OK);

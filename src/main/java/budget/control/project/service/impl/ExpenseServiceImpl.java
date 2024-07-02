@@ -20,6 +20,14 @@ public class ExpenseServiceImpl implements ExpenseService {
     ExpenseRepository repository;
 
     @Override
+    public void delete(Long id) {
+        Expense expense = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
+
+        repository.delete(expense);
+    }
+
+    @Override
     public List<ExpenseDTOResponse> getAll(Pageable pageable) {
         return repository.findAll(pageable).stream()
                 .map(ExpenseDTOResponse::new)
