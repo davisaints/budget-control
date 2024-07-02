@@ -12,7 +12,7 @@ public interface ExpenseService {
 
     ExpenseDTOResponse getById(Long id);
 
-    ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) throws DuplicateExpenseException;
+    ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest);
 
     ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id);
 
