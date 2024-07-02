@@ -45,4 +45,18 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new ExpenseDTOResponse(expense);
     }
 
+    @Override
+    public ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id) {
+        Expense expense = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
+
+        expense.setDescription(expenseDTORequest.getDescription());
+        expense.setAmount(expenseDTORequest.getAmount());
+        expense.setDate(expenseDTORequest.getDate());
+
+        repository.save(expense);
+
+        return new ExpenseDTOResponse(expense);
+    }
+
 }
