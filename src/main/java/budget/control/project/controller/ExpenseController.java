@@ -36,4 +36,9 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseService.post(expenseDTORequest), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseDTOResponse> put(@RequestBody @Valid ExpenseDTORequest expenseDTORequest, @PathVariable Long id) {
+        return new ResponseEntity<>(expenseService.put(expenseDTORequest, id), HttpStatus.CREATED);
+    }
+
 }
