@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ExpenseService {
 
+    void delete(Long id);
+
     List<ExpenseDTOResponse> getAll(Pageable pageable);
 
     ExpenseDTOResponse getById(Long id);
