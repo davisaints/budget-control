@@ -58,6 +58,10 @@ public class RevenueServiceImpl implements RevenueService {
         Revenue revenue = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
+        if (repository.findByDescriptionAndDate(revenueDTORequest.getDescription(), revenueDTORequest.getDate()) != null) {
+            throw new DuplicateRevenueException("Duplicate entries with an existing description and month are not allowed");
+        }
+
         revenue.setDescription(revenueDTORequest.getDescription());
         revenue.setAmount(revenueDTORequest.getAmount());
         revenue.setDate(revenueDTORequest.getDate());
