@@ -58,6 +58,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense expense = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
+        if (repository.findByDescriptionAndDate(expenseDTORequest.getDescription(), expenseDTORequest.getDate()) != null) {
+            throw new DuplicateRevenueException("Duplicate entries with an existing description and month are not allowed");
+        }
+
         expense.setDescription(expenseDTORequest.getDescription());
         expense.setAmount(expenseDTORequest.getAmount());
         expense.setDate(expenseDTORequest.getDate());
