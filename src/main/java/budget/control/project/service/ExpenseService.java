@@ -2,20 +2,18 @@ package budget.control.project.service;
 
 import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface ExpenseService {
 
-    void delete(Long id);
+  void delete(Long id);
 
-    List<ExpenseDTOResponse> getAll(Pageable pageable);
+  List<ExpenseDTOResponse> getAll(Pageable pageable);
 
-    ExpenseDTOResponse getById(Long id);
+  ExpenseDTOResponse getById(Long id);
 
-    ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest);
+  ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest);
 
-    ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id);
-
+  ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id);
 }
