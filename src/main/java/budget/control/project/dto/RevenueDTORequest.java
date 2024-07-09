@@ -8,14 +8,14 @@ import org.hibernate.validator.constraints.Length;
 
 public class RevenueDTORequest {
 
-  @NotEmpty
-  @Length(min = 2)
-  String description;
-
   @DecimalMin(value = "0.50")
   double amount;
 
   @PastOrPresent LocalDate date;
+
+  @NotEmpty
+  @Length(min = 2)
+  String description;
 
   public RevenueDTORequest(String description, double amount, LocalDate date) {
     this.description = description;
