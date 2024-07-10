@@ -1,5 +1,6 @@
 package budget.control.project.dto;
 
+import budget.control.project.enums.Category;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
@@ -17,10 +18,14 @@ public class RevenueDTORequest {
   @Length(min = 2)
   String description;
 
-  public RevenueDTORequest(String description, double amount, LocalDate date) {
+  Category category;
+  String categoryName;
+
+  public RevenueDTORequest(double amount, LocalDate date, String description, String categoryName) {
     this.description = description;
     this.amount = amount;
     this.date = date;
+    this.categoryName = categoryName;
   }
 
   public String getDescription() {
@@ -33,5 +38,17 @@ public class RevenueDTORequest {
 
   public double getAmount() {
     return amount;
+  }
+
+  public String getCategoryName() {
+    return categoryName;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 }

@@ -1,16 +1,18 @@
 package budget.control.project.model;
 
 import budget.control.project.dto.RevenueDTORequest;
+import budget.control.project.enums.Category;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity(name = "Revenue")
 @Table(name = "revenues")
 public class Revenue {
+
+  @Enumerated(EnumType.STRING)
+  private Category category;
 
   private double amount;
   private LocalDate date;
@@ -24,13 +26,17 @@ public class Revenue {
     this.amount = revenueDTORequest.getAmount();
     this.date = revenueDTORequest.getDate();
     this.description = revenueDTORequest.getDescription();
+    this.category = revenueDTORequest.getCategory();
   }
 
-  public Revenue(String description, double amount, LocalDate date) {
+  public Revenue(double amount, LocalDate date, String description, Category category) {
     this.amount = amount;
     this.date = date;
     this.description = description;
+    this.category = category;
   }
+
+  public Revenue() {}
 
   public double getAmount() {
     return amount;
@@ -56,7 +62,7 @@ public class Revenue {
     this.description = description;
   }
 
-  public Long getId() {
-    return id;
+  public Category getCategory() {
+    return category;
   }
 }

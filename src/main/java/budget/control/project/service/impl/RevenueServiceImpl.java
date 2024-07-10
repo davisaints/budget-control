@@ -2,6 +2,7 @@ package budget.control.project.service.impl;
 
 import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
+import budget.control.project.enums.Category;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Revenue;
 import budget.control.project.repository.RevenueRepository;
@@ -51,9 +52,15 @@ public class RevenueServiceImpl implements RevenueService {
           "Duplicate entries with an existing description and month are not allowed");
     }
 
+    if (revenueDTORequest.getCategoryName() == null) {
+      revenueDTORequest.setCategory(Category.OTHER);
+    } else {
+      revenueDTORequest.setCategory(Category.findByName(revenueDTORequest.getCategoryName()));
+    }
+
     Revenue revenue = repository.save(new Revenue(revenueDTORequest));
 
-    return new RevenueDTOResponse(revenue);
+    return new RevenueDTOResponse(new Revenue(revenueDTORequest));
   }
 
   @Override
@@ -68,6 +75,12 @@ public class RevenueServiceImpl implements RevenueService {
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
+    }
+
+    if (revenueDTORequest.getCategoryName() == null) {
+      revenueDTORequest.setCategory(Category.OTHER);
+    } else {
+      revenueDTORequest.setCategory(Category.findByName(revenueDTORequest.getCategoryName()));
     }
 
     revenue.setDescription(revenueDTORequest.getDescription());

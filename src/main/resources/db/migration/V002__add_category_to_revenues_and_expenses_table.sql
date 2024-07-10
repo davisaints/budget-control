@@ -1,0 +1,5 @@
+ALTER TABLE revenues
+ADD COLUMN category VARCHAR(100);
+
+ALTER TABLE expenses
+ADD COLUMN category VARCHAR(100);
