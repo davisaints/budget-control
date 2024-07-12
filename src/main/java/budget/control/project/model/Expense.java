@@ -12,16 +12,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "expense")
 public class Expense {
 
-  private double amount;
-  private LocalDate date;
-  private String description;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  private double amount;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
+
+  private LocalDate date;
+  private String description;
 
   public Expense(ExpenseDTORequest expenseDTORequest) {
     this.amount = expenseDTORequest.getAmount();
@@ -30,7 +32,7 @@ public class Expense {
     this.description = expenseDTORequest.getDescription();
   }
 
-  public Expense(double amount, LocalDate date, String description, Category category) {
+  public Expense(double amount, Category category, LocalDate date, String description) {
     this.amount = amount;
     this.category = category;
     this.date = date;
