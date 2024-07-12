@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity(name = "Expense")
-@Table(name = "expenses")
+@Entity
+@Table(name = "expense")
 public class Expense {
 
   private double amount;
