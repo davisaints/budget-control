@@ -19,17 +19,29 @@ public class Expense {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
 
   public Expense(ExpenseDTORequest expenseDTORequest) {
     this.amount = expenseDTORequest.getAmount();
+    this.category = expenseDTORequest.getCategory();
     this.date = expenseDTORequest.getDate();
     this.description = expenseDTORequest.getDescription();
   }
 
-  public Expense(double amount, LocalDate date, String description) {
+  public Expense(double amount, LocalDate date, String description, Category category) {
     this.amount = amount;
+    this.category = category;
     this.date = date;
     this.description = description;
+  }
+
+  public void update(ExpenseDTORequest expenseDTORequest, Category category) {
+    this.amount = expenseDTORequest.getAmount();
+    this.category = category;
+    this.date = expenseDTORequest.getDate();
+    this.description = expenseDTORequest.getDescription();
   }
 
   public double getAmount() {
@@ -38,6 +50,14 @@ public class Expense {
 
   public void setAmount(double amount) {
     this.amount = amount;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 
   public LocalDate getDate() {
