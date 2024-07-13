@@ -4,6 +4,7 @@ import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Revenue;
+import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,27 +16,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class RevenueServiceImpl implements RevenueService {
 
-  @Autowired private RevenueRepository repository;
+  @Autowired private CategoryRepository categoryRepository;
+  @Autowired private RevenueRepository revenueRepository;
 
   @Override
   public void delete(Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    repository.delete(revenue);
+    revenueRepository.delete(revenue);
   }
 
   @Override
   public List<RevenueDTOResponse> getAll(Pageable pageable) {
-    return repository.findAll(pageable).stream().map(RevenueDTOResponse::new).toList();
+    return revenueRepository.findAll(pageable).stream().map(RevenueDTOResponse::new).toList();
   }
 
   @Override
   public RevenueDTOResponse getById(Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
@@ -44,14 +46,21 @@ public class RevenueServiceImpl implements RevenueService {
 
   @Override
   public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
-    if (repository.findByDescriptionAndDate(
+    if (revenueRepository.findByDescriptionAndDate(
             revenueDTORequest.getDescription(), revenueDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    Revenue revenue = repository.save(new Revenue(revenueDTORequest));
+    if (revenueDTORequest.getCategoryName() == null) {
+      revenueDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      revenueDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
+    }
+
+    Revenue revenue = revenueRepository.save(new Revenue(revenueDTORequest));
 
     return new RevenueDTOResponse(revenue);
   }
@@ -59,22 +68,27 @@ public class RevenueServiceImpl implements RevenueService {
   @Override
   public RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    if (repository.findByDescriptionAndDate(
+    if (revenueRepository.findByDescriptionAndDate(
             revenueDTORequest.getDescription(), revenueDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    revenue.setDescription(revenueDTORequest.getDescription());
-    revenue.setAmount(revenueDTORequest.getAmount());
-    revenue.setDate(revenueDTORequest.getDate());
+    if (revenueDTORequest.getCategoryName() == null) {
+      revenueDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      revenueDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
+    }
 
-    repository.save(revenue);
+    revenue.update(revenueDTORequest, revenueDTORequest.getCategory());
+
+    revenueRepository.save(revenue);
 
     return new RevenueDTOResponse(revenue);
   }

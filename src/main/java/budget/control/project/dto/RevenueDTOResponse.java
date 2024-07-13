@@ -1,17 +1,26 @@
 package budget.control.project.dto;
 
+import budget.control.project.model.Category;
 import budget.control.project.model.Revenue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 
 public class RevenueDTOResponse {
 
-  double amount;
-  LocalDate date;
-  String description;
   Long id;
+
+  double amount;
+
+  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+  Category category;
+
+  LocalDate date;
+
+  String description;
 
   public RevenueDTOResponse(Revenue revenue) {
     this.amount = revenue.getAmount();
+    this.category = revenue.getCategory();
     this.date = revenue.getDate();
     this.description = revenue.getDescription();
   }
@@ -20,23 +29,15 @@ public class RevenueDTOResponse {
     return amount;
   }
 
-  public void setAmount(double amount) {
-    this.amount = amount;
+  public Category getCategory() {
+    return category;
   }
 
   public LocalDate getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
-    this.date = date;
-  }
-
   public String getDescription() {
     return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 }

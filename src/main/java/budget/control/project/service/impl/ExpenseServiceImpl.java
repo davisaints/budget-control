@@ -4,6 +4,7 @@ import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Expense;
+import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,27 +16,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
-  @Autowired ExpenseRepository repository;
+  @Autowired CategoryRepository categoryRepository;
+  @Autowired ExpenseRepository expenseRepository;
 
   @Override
   public void delete(Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    repository.delete(expense);
+    expenseRepository.delete(expense);
   }
 
   @Override
   public List<ExpenseDTOResponse> getAll(Pageable pageable) {
-    return repository.findAll(pageable).stream().map(ExpenseDTOResponse::new).toList();
+    return expenseRepository.findAll(pageable).stream().map(ExpenseDTOResponse::new).toList();
   }
 
   @Override
   public ExpenseDTOResponse getById(Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
@@ -44,14 +46,21 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   @Override
   public ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) {
-    if (repository.findByDescriptionAndDate(
+    if (expenseRepository.findByDescriptionAndDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    Expense expense = repository.save(new Expense(expenseDTORequest));
+    if (expenseDTORequest.getCategoryName() == null) {
+      expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      expenseDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+    }
+
+    Expense expense = expenseRepository.save(new Expense(expenseDTORequest));
 
     return new ExpenseDTOResponse(expense);
   }
@@ -59,22 +68,27 @@ public class ExpenseServiceImpl implements ExpenseService {
   @Override
   public ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    if (repository.findByDescriptionAndDate(
+    if (expenseRepository.findByDescriptionAndDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    expense.setDescription(expenseDTORequest.getDescription());
-    expense.setAmount(expenseDTORequest.getAmount());
-    expense.setDate(expenseDTORequest.getDate());
+    if (expenseDTORequest.getCategoryName() == null) {
+      expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      expenseDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+    }
 
-    repository.save(expense);
+    expense.update(expenseDTORequest, expenseDTORequest.getCategory());
+
+    expenseRepository.save(expense);
 
     return new ExpenseDTOResponse(expense);
   }

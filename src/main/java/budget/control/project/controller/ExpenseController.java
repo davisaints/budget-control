@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "expenses")
+@RequestMapping(value = "expense")
 public class ExpenseController {
 
   @Autowired ExpenseService expenseService;
