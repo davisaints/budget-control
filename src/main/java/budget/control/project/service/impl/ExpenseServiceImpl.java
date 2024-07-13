@@ -4,6 +4,7 @@ import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Expense;
+import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
-  @Autowired ExpenseRepository repository;
+  @Autowired CategoryRepository categoryRepository;
 
   @Override
   public void delete(Long id) {
@@ -51,6 +52,12 @@ public class ExpenseServiceImpl implements ExpenseService {
           "Duplicate entries with an existing description and month are not allowed");
     }
 
+    if (expenseDTORequest.getCategoryName() == null) {
+      expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      expenseDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+    }
     Expense expense = repository.save(new Expense(expenseDTORequest));
 
     return new ExpenseDTOResponse(expense);
@@ -70,11 +77,12 @@ public class ExpenseServiceImpl implements ExpenseService {
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    expense.setDescription(expenseDTORequest.getDescription());
-    expense.setAmount(expenseDTORequest.getAmount());
-    expense.setDate(expenseDTORequest.getDate());
-
-    repository.save(expense);
+    if (expenseDTORequest.getCategoryName() == null) {
+      expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
+    } else {
+      expenseDTORequest.setCategory(
+          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+    }
 
     return new ExpenseDTOResponse(expense);
   }
