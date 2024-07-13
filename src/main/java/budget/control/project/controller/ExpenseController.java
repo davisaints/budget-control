@@ -4,8 +4,8 @@ import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
 import budget.control.project.service.ExpenseService;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class ExpenseController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ExpenseDTOResponse>> getAll(
+  public ResponseEntity<Page<ExpenseDTOResponse>> getAll(
       @PageableDefault(
               size = 10,
               sort = {"date"})

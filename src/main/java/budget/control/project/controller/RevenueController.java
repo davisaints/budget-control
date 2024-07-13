@@ -4,8 +4,8 @@ import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
 import budget.control.project.service.RevenueService;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public class RevenueController {
   }
 
   @GetMapping
-  public ResponseEntity<List<RevenueDTOResponse>> getAll(
+  public ResponseEntity<Page<RevenueDTOResponse>> getAll(
       @PageableDefault(
               size = 10,
               sort = {"date"})

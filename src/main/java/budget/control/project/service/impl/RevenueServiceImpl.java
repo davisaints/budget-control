@@ -8,8 +8,8 @@ import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,8 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public List<RevenueDTOResponse> getAll(Pageable pageable) {
-    return revenueRepository.findAll(pageable).stream().map(RevenueDTOResponse::new).toList();
+  public Page<RevenueDTOResponse> getAll(Pageable pageable) {
+    return revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
   }
 
   @Override

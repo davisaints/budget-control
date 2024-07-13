@@ -2,7 +2,7 @@ package budget.control.project.service;
 
 import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface RevenueService {
@@ -11,7 +11,7 @@ public interface RevenueService {
 
   RevenueDTOResponse getById(Long id);
 
-  List<RevenueDTOResponse> getAll(Pageable pageable);
+  Page<RevenueDTOResponse> getAll(Pageable pageable);
 
   RevenueDTOResponse post(RevenueDTORequest revenueDTORequest);
 
