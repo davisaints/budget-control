@@ -14,15 +14,15 @@ public class RevenueDTOResponse {
   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
   Category category;
 
-  LocalDate date;
-
   String description;
+
+  LocalDate transactionDate;
 
   public RevenueDTOResponse(Revenue revenue) {
     this.amount = revenue.getAmount();
     this.category = revenue.getCategory();
-    this.date = revenue.getDate();
     this.description = revenue.getDescription();
+    this.transactionDate = revenue.getTransactionDate();
   }
 
   public double getAmount() {
@@ -33,11 +33,11 @@ public class RevenueDTOResponse {
     return category;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
-
   public String getDescription() {
     return description;
+  }
+
+  public LocalDate getTransactionDate() {
+    return transactionDate;
   }
 }

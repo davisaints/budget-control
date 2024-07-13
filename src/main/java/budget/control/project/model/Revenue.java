@@ -20,22 +20,23 @@ public class Revenue {
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
-  private LocalDate date;
-
   private String description;
+
+  @Column(name = "transaction_date")
+  private LocalDate transactionDate;
 
   public Revenue(RevenueDTORequest revenueDTORequest) {
     this.amount = revenueDTORequest.getAmount();
     this.category = revenueDTORequest.getCategory();
-    this.date = revenueDTORequest.getDate();
     this.description = revenueDTORequest.getDescription();
+    this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
-  public Revenue(double amount, Category category, LocalDate date, String description) {
+  public Revenue(double amount, Category category, String description, LocalDate transactionDate) {
     this.amount = amount;
     this.category = category;
-    this.date = date;
     this.description = description;
+    this.transactionDate = transactionDate;
   }
 
   public Revenue() {}
@@ -43,8 +44,8 @@ public class Revenue {
   public void update(RevenueDTORequest revenueDTORequest, Category category) {
     this.amount = revenueDTORequest.getAmount();
     this.category = category;
-    this.date = revenueDTORequest.getDate();
     this.description = revenueDTORequest.getDescription();
+    this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
   public double getAmount() {
@@ -55,15 +56,15 @@ public class Revenue {
     return category;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
-
   public String getDescription() {
     return description;
   }
 
   public Long getId() {
     return id;
+  }
+
+  public LocalDate getTransactionDate() {
+    return transactionDate;
   }
 }

@@ -16,17 +16,18 @@ public class RevenueDTORequest {
 
   String categoryName;
 
-  @PastOrPresent LocalDate date;
-
   @NotEmpty
   @Length(min = 2)
   String description;
 
-  public RevenueDTORequest(double amount, String categoryName, LocalDate date, String description) {
+  @PastOrPresent LocalDate transactionDate;
+
+  public RevenueDTORequest(
+      double amount, String categoryName, String description, LocalDate transactionDate) {
     this.description = description;
     this.amount = amount;
-    this.date = date;
     this.categoryName = categoryName;
+    this.transactionDate = transactionDate;
   }
 
   public double getAmount() {
@@ -45,11 +46,11 @@ public class RevenueDTORequest {
     return categoryName;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
-
   public String getDescription() {
     return description;
+  }
+
+  public LocalDate getTransactionDate() {
+    return transactionDate;
   }
 }
