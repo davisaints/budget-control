@@ -35,7 +35,7 @@ public class ExpenseServiceImpl implements ExpenseService {
       return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
     } else {
       return expenseRepository
-          .findDescriptionContaining(description, pageable)
+          .findByDescriptionContaining(description, pageable)
           .map(ExpenseDTOResponse::new);
     }
   }

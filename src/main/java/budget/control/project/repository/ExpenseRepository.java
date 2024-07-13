@@ -12,5 +12,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
   Expense findByDescriptionAndTransactionDate(String description, LocalDate transactionDate);
 
-  Page<Expense> findDescriptionContaining(String description, Pageable pageable);
+  Page<Expense> findByDescriptionContaining(String description, Pageable pageable);
 }
