@@ -17,26 +17,27 @@ import org.springframework.stereotype.Service;
 public class RevenueServiceImpl implements RevenueService {
 
   @Autowired private CategoryRepository categoryRepository;
+  @Autowired private RevenueRepository revenueRepository;
 
   @Override
   public void delete(Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    repository.delete(revenue);
+    revenueRepository.delete(revenue);
   }
 
   @Override
   public List<RevenueDTOResponse> getAll(Pageable pageable) {
-    return repository.findAll(pageable).stream().map(RevenueDTOResponse::new).toList();
+    return revenueRepository.findAll(pageable).stream().map(RevenueDTOResponse::new).toList();
   }
 
   @Override
   public RevenueDTOResponse getById(Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
@@ -45,7 +46,7 @@ public class RevenueServiceImpl implements RevenueService {
 
   @Override
   public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
-    if (repository.findByDescriptionAndDate(
+    if (revenueRepository.findByDescriptionAndDate(
             revenueDTORequest.getDescription(), revenueDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
@@ -58,7 +59,8 @@ public class RevenueServiceImpl implements RevenueService {
       revenueDTORequest.setCategory(
           categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
     }
-    Revenue revenue = repository.save(new Revenue(revenueDTORequest));
+
+    Revenue revenue = revenueRepository.save(new Revenue(revenueDTORequest));
 
     return new RevenueDTOResponse(revenue);
   }
@@ -66,11 +68,11 @@ public class RevenueServiceImpl implements RevenueService {
   @Override
   public RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id) {
     Revenue revenue =
-        repository
+        revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    if (repository.findByDescriptionAndDate(
+    if (revenueRepository.findByDescriptionAndDate(
             revenueDTORequest.getDescription(), revenueDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
@@ -85,6 +87,8 @@ public class RevenueServiceImpl implements RevenueService {
     }
 
     revenue.update(revenueDTORequest, revenueDTORequest.getCategory());
+
+    revenueRepository.save(revenue);
 
     return new RevenueDTOResponse(revenue);
   }

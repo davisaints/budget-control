@@ -17,26 +17,27 @@ import org.springframework.stereotype.Service;
 public class ExpenseServiceImpl implements ExpenseService {
 
   @Autowired CategoryRepository categoryRepository;
+  @Autowired ExpenseRepository expenseRepository;
 
   @Override
   public void delete(Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    repository.delete(expense);
+    expenseRepository.delete(expense);
   }
 
   @Override
   public List<ExpenseDTOResponse> getAll(Pageable pageable) {
-    return repository.findAll(pageable).stream().map(ExpenseDTOResponse::new).toList();
+    return expenseRepository.findAll(pageable).stream().map(ExpenseDTOResponse::new).toList();
   }
 
   @Override
   public ExpenseDTOResponse getById(Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
@@ -45,7 +46,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   @Override
   public ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) {
-    if (repository.findByDescriptionAndDate(
+    if (expenseRepository.findByDescriptionAndDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
@@ -58,7 +59,8 @@ public class ExpenseServiceImpl implements ExpenseService {
       expenseDTORequest.setCategory(
           categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
     }
-    Expense expense = repository.save(new Expense(expenseDTORequest));
+
+    Expense expense = expenseRepository.save(new Expense(expenseDTORequest));
 
     return new ExpenseDTOResponse(expense);
   }
@@ -66,11 +68,11 @@ public class ExpenseServiceImpl implements ExpenseService {
   @Override
   public ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id) {
     Expense expense =
-        repository
+        expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    if (repository.findByDescriptionAndDate(
+    if (expenseRepository.findByDescriptionAndDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getDate())
         != null) {
       throw new DuplicateRevenueException(
@@ -85,6 +87,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     expense.update(expenseDTORequest, expenseDTORequest.getCategory());
+
+    expenseRepository.save(expense);
 
     return new ExpenseDTOResponse(expense);
   }
