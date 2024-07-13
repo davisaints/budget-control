@@ -3,8 +3,10 @@ package budget.control.project.dto;
 import budget.control.project.model.Category;
 import budget.control.project.model.Revenue;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.time.LocalDate;
 
+@JsonPropertyOrder({"category", "description", "amount", "transactionDate"})
 public class RevenueDTOResponse {
 
   Long id;
