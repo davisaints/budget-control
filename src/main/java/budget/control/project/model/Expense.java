@@ -4,9 +4,7 @@ import budget.control.project.dto.ExpenseDTORequest;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "expense")
@@ -38,6 +36,8 @@ public class Expense {
     this.date = date;
     this.description = description;
   }
+
+  public Expense() {}
 
   public void update(ExpenseDTORequest expenseDTORequest, Category category) {
     this.amount = expenseDTORequest.getAmount();
