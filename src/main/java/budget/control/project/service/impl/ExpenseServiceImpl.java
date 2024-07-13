@@ -8,8 +8,8 @@ import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,8 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public List<ExpenseDTOResponse> getAll(Pageable pageable) {
-    return expenseRepository.findAll(pageable).stream().map(ExpenseDTOResponse::new).toList();
+  public Page<ExpenseDTOResponse> getAll(Pageable pageable) {
+    return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
   }
 
   @Override
