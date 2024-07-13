@@ -84,7 +84,7 @@ public class RevenueServiceImpl implements RevenueService {
           categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
     }
 
-    repository.save(revenue);
+    revenue.update(revenueDTORequest, revenueDTORequest.getCategory());
 
     return new RevenueDTOResponse(revenue);
   }

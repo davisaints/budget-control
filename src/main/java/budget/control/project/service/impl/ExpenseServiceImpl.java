@@ -84,6 +84,8 @@ public class ExpenseServiceImpl implements ExpenseService {
           categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
     }
 
+    expense.update(expenseDTORequest, expenseDTORequest.getCategory());
+
     return new ExpenseDTOResponse(expense);
   }
 }
