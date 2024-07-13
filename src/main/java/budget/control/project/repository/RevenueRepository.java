@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {
 
-  Revenue findByDescriptionAndDate(String description, LocalDate date);
+  Revenue findByDescriptionAndTransactionDate(String description, LocalDate transactionDate);
 
   Page<Revenue> findByDescriptionContaining(String description, Pageable pageable);
 }

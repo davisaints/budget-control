@@ -52,8 +52,8 @@ public class RevenueServiceImpl implements RevenueService {
 
   @Override
   public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
-    if (revenueRepository.findByDescriptionAndDate(
-            revenueDTORequest.getDescription(), revenueDTORequest.getDate())
+    if (revenueRepository.findByDescriptionAndTransactionDate(
+            revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
@@ -78,8 +78,8 @@ public class RevenueServiceImpl implements RevenueService {
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    if (revenueRepository.findByDescriptionAndDate(
-            revenueDTORequest.getDescription(), revenueDTORequest.getDate())
+    if (revenueRepository.findByDescriptionAndTransactionDate(
+            revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");

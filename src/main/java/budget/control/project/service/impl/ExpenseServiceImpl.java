@@ -52,8 +52,8 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   @Override
   public ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) {
-    if (expenseRepository.findByDescriptionAndDate(
-            expenseDTORequest.getDescription(), expenseDTORequest.getDate())
+    if (expenseRepository.findByDescriptionAndTransactionDate(
+            expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
@@ -78,8 +78,8 @@ public class ExpenseServiceImpl implements ExpenseService {
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    if (expenseRepository.findByDescriptionAndDate(
-            expenseDTORequest.getDescription(), expenseDTORequest.getDate())
+    if (expenseRepository.findByDescriptionAndTransactionDate(
+            expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
