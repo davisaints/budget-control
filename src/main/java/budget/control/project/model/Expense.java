@@ -21,6 +21,7 @@ public class Expense {
   private Category category;
 
   private LocalDate date;
+  
   private String description;
 
   public Expense(ExpenseDTORequest expenseDTORequest) {
