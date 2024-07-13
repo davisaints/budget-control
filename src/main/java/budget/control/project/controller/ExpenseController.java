@@ -31,8 +31,9 @@ public class ExpenseController {
       @PageableDefault(
               size = 10,
               sort = {"date"})
-          Pageable pageable) {
-    return new ResponseEntity<>(expenseService.getAll(pageable), HttpStatus.OK);
+          String description,
+      Pageable pageable) {
+    return new ResponseEntity<>(expenseService.getAll(description, pageable), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")

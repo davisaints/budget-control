@@ -30,8 +30,14 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public Page<RevenueDTOResponse> getAll(Pageable pageable) {
-    return revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
+  public Page<RevenueDTOResponse> getAll(String description, Pageable pageable) {
+    if (description == null) {
+      return revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
+    } else {
+      return revenueRepository
+          .findByDescriptionContaining(description, pageable)
+          .map(RevenueDTOResponse::new);
+    }
   }
 
   @Override

@@ -30,8 +30,14 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public Page<ExpenseDTOResponse> getAll(Pageable pageable) {
-    return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
+  public Page<ExpenseDTOResponse> getAll(String description, Pageable pageable) {
+    if (description == null) {
+      return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
+    } else {
+      return expenseRepository
+          .findDescriptionContaining(description, pageable)
+          .map(ExpenseDTOResponse::new);
+    }
   }
 
   @Override

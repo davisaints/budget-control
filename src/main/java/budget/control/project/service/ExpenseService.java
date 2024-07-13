@@ -9,7 +9,7 @@ public interface ExpenseService {
 
   void delete(Long id);
 
-  Page<ExpenseDTOResponse> getAll(Pageable pageable);
+  Page<ExpenseDTOResponse> getAll(String description, Pageable pageable);
 
   ExpenseDTOResponse getById(Long id);
 

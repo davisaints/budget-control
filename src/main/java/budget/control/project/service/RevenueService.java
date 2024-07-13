@@ -11,7 +11,7 @@ public interface RevenueService {
 
   RevenueDTOResponse getById(Long id);
 
-  Page<RevenueDTOResponse> getAll(Pageable pageable);
+  Page<RevenueDTOResponse> getAll(String description, Pageable pageable);
 
   RevenueDTOResponse post(RevenueDTORequest revenueDTORequest);
 

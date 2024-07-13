@@ -36,8 +36,9 @@ public class RevenueController {
       @PageableDefault(
               size = 10,
               sort = {"date"})
-          Pageable pageable) {
-    return new ResponseEntity<>(revenueService.getAll(pageable), HttpStatus.OK);
+          String description,
+      Pageable pageable) {
+    return new ResponseEntity<>(revenueService.getAll(description, pageable), HttpStatus.OK);
   }
 
   @PostMapping
