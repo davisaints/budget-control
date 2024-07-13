@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(of = "id")
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table(name = "expense")
 public class Expense {
 
