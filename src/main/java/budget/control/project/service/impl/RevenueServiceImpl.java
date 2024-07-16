@@ -8,6 +8,7 @@ import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class RevenueServiceImpl implements RevenueService {
             revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateRevenueException(
-          "Duplicate entries with an existing description and month are not allowed");
+          "Revenue with the given description and transaction date already exists");
     }
 
     if (revenueDTORequest.getCategoryName() == null) {
@@ -73,16 +74,18 @@ public class RevenueServiceImpl implements RevenueService {
 
   @Override
   public RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id) {
-    Revenue revenue =
+    Revenue existingRevenue =
         revenueRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Revenue not found with id: " + id));
 
-    if (revenueRepository.findByDescriptionAndTransactionDate(
-            revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate())
-        != null) {
+    Revenue duplicateRevenue =
+        revenueRepository.findByDescriptionAndTransactionDate(
+            revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate());
+
+    if (duplicateRevenue != null && !Objects.equals(duplicateRevenue.getId(), id)) {
       throw new DuplicateRevenueException(
-          "Duplicate entries with an existing description and month are not allowed");
+          "Revenue with the given description and transaction date already exists");
     }
 
     if (revenueDTORequest.getCategoryName() == null) {
@@ -92,10 +95,10 @@ public class RevenueServiceImpl implements RevenueService {
           categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
     }
 
-    revenue.update(revenueDTORequest, revenueDTORequest.getCategory());
+    existingRevenue.update(revenueDTORequest, revenueDTORequest.getCategory());
 
-    revenueRepository.save(revenue);
+    revenueRepository.save(existingRevenue);
 
-    return new RevenueDTOResponse(revenue);
+    return new RevenueDTOResponse(existingRevenue);
   }
 }

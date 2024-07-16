@@ -8,6 +8,7 @@ import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,14 +74,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   @Override
   public ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id) {
-    Expense expense =
+    Expense existingExpense =
         expenseRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
-    if (expenseRepository.findByDescriptionAndTransactionDate(
-            expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
-        != null) {
+    Expense duplicateExpense =
+        expenseRepository.findByDescriptionAndTransactionDate(
+            expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate());
+
+    if (duplicateExpense != null && !Objects.equals(duplicateExpense.getId(), id)) {
       throw new DuplicateRevenueException(
           "Duplicate entries with an existing description and month are not allowed");
     }
@@ -92,10 +95,10 @@ public class ExpenseServiceImpl implements ExpenseService {
           categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
     }
 
-    expense.update(expenseDTORequest, expenseDTORequest.getCategory());
+    existingExpense.update(expenseDTORequest, expenseDTORequest.getCategory());
 
-    expenseRepository.save(expense);
+    expenseRepository.save(existingExpense);
 
-    return new ExpenseDTOResponse(expense);
+    return new ExpenseDTOResponse(existingExpense);
   }
 }
