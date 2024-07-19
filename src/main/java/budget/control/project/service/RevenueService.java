@@ -9,9 +9,9 @@ public interface RevenueService {
 
   void delete(Long id);
 
-  RevenueDTOResponse getById(Long id);
-
   Page<RevenueDTOResponse> getAll(String description, Pageable pageable);
+
+  RevenueDTOResponse getById(Long id);
 
   Page<RevenueDTOResponse> getByYearAndMonth(Integer year, Integer month, Pageable pageable);
 
