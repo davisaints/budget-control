@@ -28,11 +28,7 @@ public class RevenueController {
 
   @GetMapping
   public ResponseEntity<Page<RevenueDTOResponse>> getAll(
-      @PageableDefault(
-              size = 10,
-              sort = {"date"})
-          String description,
-      Pageable pageable) {
+      @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
     return new ResponseEntity<>(revenueService.getAll(description, pageable), HttpStatus.OK);
   }
 

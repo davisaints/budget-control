@@ -28,11 +28,7 @@ public class ExpenseController {
 
   @GetMapping
   public ResponseEntity<Page<ExpenseDTOResponse>> getAll(
-      @PageableDefault(
-              size = 10,
-              sort = {"date"})
-          String description,
-      Pageable pageable) {
+      @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
     return new ResponseEntity<>(expenseService.getAll(description, pageable), HttpStatus.OK);
   }
 
