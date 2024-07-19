@@ -26,6 +26,16 @@ public class RevenueController {
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping
+  public ResponseEntity<Page<RevenueDTOResponse>> getAll(
+      @PageableDefault(
+              size = 10,
+              sort = {"date"})
+          String description,
+      Pageable pageable) {
+    return new ResponseEntity<>(revenueService.getAll(description, pageable), HttpStatus.OK);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<RevenueDTOResponse> getById(@PathVariable Long id) {
     return new ResponseEntity<>(revenueService.getById(id), HttpStatus.OK);
@@ -36,16 +46,6 @@ public class RevenueController {
       @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
     return new ResponseEntity<>(
         revenueService.getByYearAndMonth(year, month, pageable), HttpStatus.OK);
-  }
-
-  @GetMapping
-  public ResponseEntity<Page<RevenueDTOResponse>> getAll(
-      @PageableDefault(
-              size = 10,
-              sort = {"date"})
-          String description,
-      Pageable pageable) {
-    return new ResponseEntity<>(revenueService.getAll(description, pageable), HttpStatus.OK);
   }
 
   @PostMapping
