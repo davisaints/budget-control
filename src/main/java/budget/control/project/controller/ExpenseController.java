@@ -41,6 +41,13 @@ public class ExpenseController {
     return new ResponseEntity<>(expenseService.getById(id), HttpStatus.OK);
   }
 
+  @GetMapping("/{year}/{month}")
+  public ResponseEntity<Page<ExpenseDTOResponse>> getByYearAndMonth(
+      @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
+    return new ResponseEntity<>(
+        expenseService.getByYearAndMonth(year, month, pageable), HttpStatus.OK);
+  }
+
   @PostMapping
   public ResponseEntity<ExpenseDTOResponse> post(
       @RequestBody @Valid ExpenseDTORequest expenseDTORequest) {

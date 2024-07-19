@@ -31,6 +31,13 @@ public class RevenueController {
     return new ResponseEntity<>(revenueService.getById(id), HttpStatus.OK);
   }
 
+  @GetMapping("/{year}/{month}")
+  public ResponseEntity<Page<RevenueDTOResponse>> getByYearAndMonth(
+      @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
+    return new ResponseEntity<>(
+        revenueService.getByYearAndMonth(year, month, pageable), HttpStatus.OK);
+  }
+
   @GetMapping
   public ResponseEntity<Page<RevenueDTOResponse>> getAll(
       @PageableDefault(
