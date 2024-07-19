@@ -13,6 +13,8 @@ public interface ExpenseService {
 
   ExpenseDTOResponse getById(Long id);
 
+  Page<ExpenseDTOResponse> getByYearAndMonth(Integer year, Integer month, Pageable pageable);
+
   ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest);
 
   ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id);

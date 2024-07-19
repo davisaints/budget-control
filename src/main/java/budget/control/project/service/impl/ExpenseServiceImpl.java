@@ -12,7 +12,9 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -49,6 +51,16 @@ public class ExpenseServiceImpl implements ExpenseService {
             .orElseThrow(() -> new EntityNotFoundException("Expense not found with id: " + id));
 
     return new ExpenseDTOResponse(expense);
+  }
+
+  @Override
+  public Page<ExpenseDTOResponse> getByYearAndMonth(
+      Integer year, Integer month, Pageable pageable) {
+    if (year == null || month == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year and month must be provided");
+    }
+
+    return expenseRepository.findByYearAndMonth(year, month, pageable).map(ExpenseDTOResponse::new);
   }
 
   @Override
