@@ -57,7 +57,7 @@ public class RevenueServiceImpl implements RevenueService {
   public Page<RevenueDTOResponse> getByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
     if (year == null || month == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year and month must be provided");
+      throw new IllegalArgumentException("Year and month must be provided");
     }
 
     return revenueRepository.findByYearAndMonth(year, month, pageable).map(RevenueDTOResponse::new);
