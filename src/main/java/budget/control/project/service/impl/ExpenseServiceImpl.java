@@ -72,7 +72,8 @@ public class ExpenseServiceImpl implements ExpenseService {
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    if (expenseDTORequest.getCategoryName() == null) {
+    if (expenseDTORequest.getCategoryName() == null
+        || expenseDTORequest.getCategoryName().isEmpty()) {
       expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
     } else {
       expenseDTORequest.setCategory(
@@ -100,7 +101,8 @@ public class ExpenseServiceImpl implements ExpenseService {
           "Duplicate entries with an existing description and month are not allowed");
     }
 
-    if (expenseDTORequest.getCategoryName() == null) {
+    if (expenseDTORequest.getCategoryName() == null
+        || expenseDTORequest.getCategoryName().isEmpty()) {
       expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
     } else {
       expenseDTORequest.setCategory(
