@@ -77,7 +77,17 @@ public class ExpenseServiceImpl implements ExpenseService {
       expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
     } else {
       expenseDTORequest.setCategory(
-          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+          categoryRepository
+              .findByNameIgnoreCase(expenseDTORequest.getCategoryName())
+              .orElseThrow(
+                  () ->
+                      new InvalidCategoryException(
+                          "Invalid category: "
+                              + expenseDTORequest.getCategoryName()
+                              + ". Valid categories are: "
+                              + categoryRepository.findAll().stream()
+                                  .map(Category::getName)
+                                  .collect(Collectors.joining(", ")))));
     }
 
     Expense expense = expenseRepository.save(new Expense(expenseDTORequest));
@@ -106,7 +116,17 @@ public class ExpenseServiceImpl implements ExpenseService {
       expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
     } else {
       expenseDTORequest.setCategory(
-          categoryRepository.findByNameIgnoreCase(expenseDTORequest.getCategoryName()));
+          categoryRepository
+              .findByNameIgnoreCase(expenseDTORequest.getCategoryName())
+              .orElseThrow(
+                  () ->
+                      new InvalidCategoryException(
+                          "Invalid category: "
+                              + expenseDTORequest.getCategoryName()
+                              + ". Valid categories are: "
+                              + categoryRepository.findAll().stream()
+                                  .map(Category::getName)
+                                  .collect(Collectors.joining(", ")))));
     }
 
     existingExpense.update(expenseDTORequest, expenseDTORequest.getCategory());
