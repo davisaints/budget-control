@@ -2,6 +2,7 @@ package budget.control.project.model;
 
 import budget.control.project.dto.RevenueDTORequest;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
 
@@ -14,11 +15,7 @@ public class Revenue {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private double amount;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "category_id", nullable = false)
-  private Category category;
+  private BigDecimal amount;
 
   private String description;
 
@@ -27,33 +24,26 @@ public class Revenue {
 
   public Revenue(RevenueDTORequest revenueDTORequest) {
     this.amount = revenueDTORequest.getAmount();
-    this.category = revenueDTORequest.getCategory();
     this.description = revenueDTORequest.getDescription();
     this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
-  public Revenue(double amount, Category category, String description, LocalDate transactionDate) {
+  public Revenue(BigDecimal amount, String description, LocalDate transactionDate) {
     this.amount = amount;
-    this.category = category;
     this.description = description;
     this.transactionDate = transactionDate;
   }
 
   public Revenue() {}
 
-  public void update(RevenueDTORequest revenueDTORequest, Category category) {
+  public void update(RevenueDTORequest revenueDTORequest) {
     this.amount = revenueDTORequest.getAmount();
-    this.category = category;
     this.description = revenueDTORequest.getDescription();
     this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
-  public double getAmount() {
+  public BigDecimal getAmount() {
     return amount;
-  }
-
-  public Category getCategory() {
-    return category;
   }
 
   public String getDescription() {

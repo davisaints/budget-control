@@ -4,12 +4,13 @@ import budget.control.project.model.Category;
 import budget.control.project.model.Expense;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @JsonPropertyOrder({"category", "description", "amount", "transactionDate"})
 public class ExpenseDTOResponse {
 
-  private double amount;
+  private BigDecimal amount;
 
   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
   private Category category;
@@ -25,7 +26,7 @@ public class ExpenseDTOResponse {
     this.transactionDate = expense.getTransactionDate();
   }
 
-  public double getAmount() {
+  public BigDecimal getAmount() {
     return amount;
   }
 
