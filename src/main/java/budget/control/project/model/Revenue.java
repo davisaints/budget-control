@@ -1,6 +1,7 @@
 package budget.control.project.model;
 
 import budget.control.project.dto.RevenueDTORequest;
+import budget.control.project.utils.BigDecimalUtil;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class Revenue {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private BigDecimal amount;
+  private BigDecimal amount = BigDecimal.ZERO;
 
   private String description;
 
@@ -23,13 +24,13 @@ public class Revenue {
   private LocalDate transactionDate;
 
   public Revenue(RevenueDTORequest revenueDTORequest) {
-    this.amount = revenueDTORequest.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(revenueDTORequest.getAmount());
     this.description = revenueDTORequest.getDescription();
     this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
   public Revenue(BigDecimal amount, String description, LocalDate transactionDate) {
-    this.amount = amount;
+    this.amount = BigDecimalUtil.roundWithCeiling(amount);
     this.description = description;
     this.transactionDate = transactionDate;
   }
@@ -37,7 +38,7 @@ public class Revenue {
   public Revenue() {}
 
   public void update(RevenueDTORequest revenueDTORequest) {
-    this.amount = revenueDTORequest.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(revenueDTORequest.getAmount());
     this.description = revenueDTORequest.getDescription();
     this.transactionDate = revenueDTORequest.getTransactionDate();
   }

@@ -1,6 +1,7 @@
 package budget.control.project.model;
 
 import budget.control.project.dto.ExpenseDTORequest;
+import budget.control.project.utils.BigDecimalUtil;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class Expense {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private BigDecimal amount;
+  private BigDecimal amount = BigDecimal.ZERO;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)
@@ -27,7 +28,7 @@ public class Expense {
   private LocalDate transactionDate;
 
   public Expense(ExpenseDTORequest expenseDTORequest) {
-    this.amount = expenseDTORequest.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(expenseDTORequest.getAmount());
     this.category = expenseDTORequest.getCategory();
     this.description = expenseDTORequest.getDescription();
     this.transactionDate = expenseDTORequest.getTransactionDate();
@@ -35,7 +36,7 @@ public class Expense {
 
   public Expense(
       BigDecimal amount, Category category, String description, LocalDate transactionDate) {
-    this.amount = amount;
+    this.amount = BigDecimalUtil.roundWithCeiling(amount);
     this.category = category;
     this.description = description;
     this.transactionDate = transactionDate;
@@ -44,7 +45,7 @@ public class Expense {
   public Expense() {}
 
   public void update(ExpenseDTORequest expenseDTORequest, Category category) {
-    this.amount = expenseDTORequest.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(expenseDTORequest.getAmount());
     this.category = category;
     this.description = expenseDTORequest.getDescription();
     this.transactionDate = expenseDTORequest.getTransactionDate();

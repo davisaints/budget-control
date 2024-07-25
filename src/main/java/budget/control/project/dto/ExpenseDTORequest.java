@@ -1,6 +1,7 @@
 package budget.control.project.dto;
 
 import budget.control.project.model.Category;
+import budget.control.project.utils.BigDecimalUtil;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
@@ -25,7 +26,7 @@ public class ExpenseDTORequest {
 
   public ExpenseDTORequest(
       BigDecimal amount, String categoryName, String description, LocalDate transactionDate) {
-    this.amount = amount;
+    this.amount = BigDecimalUtil.roundWithCeiling(amount);
     this.categoryName = categoryName;
     this.description = description;
     this.transactionDate = transactionDate;

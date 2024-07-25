@@ -1,6 +1,7 @@
 package budget.control.project.dto;
 
 import budget.control.project.model.Revenue;
+import budget.control.project.utils.BigDecimalUtil;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class RevenueDTOResponse {
   LocalDate transactionDate;
 
   public RevenueDTOResponse(Revenue revenue) {
-    this.amount = revenue.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(revenue.getAmount());
     this.description = revenue.getDescription();
     this.transactionDate = revenue.getTransactionDate();
   }

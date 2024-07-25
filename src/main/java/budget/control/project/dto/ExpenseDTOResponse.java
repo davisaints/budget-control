@@ -2,6 +2,7 @@ package budget.control.project.dto;
 
 import budget.control.project.model.Category;
 import budget.control.project.model.Expense;
+import budget.control.project.utils.BigDecimalUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class ExpenseDTOResponse {
   private LocalDate transactionDate;
 
   public ExpenseDTOResponse(Expense expense) {
-    this.amount = expense.getAmount();
+    this.amount = BigDecimalUtil.roundWithCeiling(expense.getAmount());
     this.category = expense.getCategory();
     this.description = expense.getDescription();
     this.transactionDate = expense.getTransactionDate();
