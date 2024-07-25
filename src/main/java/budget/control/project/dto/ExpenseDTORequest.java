@@ -4,7 +4,6 @@ import budget.control.project.model.Category;
 import budget.control.project.utils.BigDecimalUtil;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.hibernate.validator.constraints.Length;
@@ -22,7 +21,7 @@ public class ExpenseDTORequest {
   @Length(min = 2)
   String description;
 
-  @PastOrPresent LocalDate transactionDate;
+  LocalDate transactionDate;
 
   public ExpenseDTORequest(
       BigDecimal amount, String categoryName, String description, LocalDate transactionDate) {

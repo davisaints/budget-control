@@ -16,7 +16,7 @@ public class RevenueDTORequest {
   @Length(min = 2)
   String description;
 
-  @PastOrPresent LocalDate transactionDate;
+  LocalDate transactionDate;
 
   public RevenueDTORequest(BigDecimal amount, String description, LocalDate transactionDate) {
     this.description = description;
