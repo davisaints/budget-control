@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {
 
   @Query(
-      "select r from Revenue r where year(r.transactionDate) = :year and month(r.transactionDate) = :month")
+      "SELECT r FROM Revenue r WHERE YEAR(r.transactionDate) = :year AND MONTH(r.transactionDate) = :month")
   Page<Revenue> findByYearAndMonth(
       @Param("year") Integer year, @Param("month") Integer month, Pageable pageable);
 
