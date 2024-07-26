@@ -3,24 +3,24 @@ package budget.control.project.dto;
 import budget.control.project.model.Category;
 import budget.control.project.utils.BigDecimalUtil;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import org.hibernate.validator.constraints.Length;
 
 public class ExpenseDTORequest {
 
-  @DecimalMin(value = "0.50")
+  @DecimalMin(value = "0.05")
   private BigDecimal amount;
 
   private Category category;
 
   private String categoryName;
 
-  @NotEmpty
-  @Length(min = 2)
+  @NotBlank(message = "Description is mandatory")
   private String description;
 
+  @NotNull(message = "Transaction date is mandatory")
   private LocalDate transactionDate;
 
   public ExpenseDTORequest(

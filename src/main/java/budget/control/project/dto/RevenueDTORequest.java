@@ -2,20 +2,20 @@ package budget.control.project.dto;
 
 import budget.control.project.utils.BigDecimalUtil;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import org.hibernate.validator.constraints.Length;
 
 public class RevenueDTORequest {
 
   @DecimalMin(value = "0.50")
   private BigDecimal amount;
 
-  @NotEmpty
-  @Length(min = 2)
+  @NotBlank(message = "Description is mandatory")
   private String description;
 
+  @NotNull(message = "Transaction date is mandatory")
   private LocalDate transactionDate;
 
   public RevenueDTORequest(BigDecimal amount, String description, LocalDate transactionDate) {
