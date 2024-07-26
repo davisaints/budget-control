@@ -15,8 +15,8 @@ public class MonthlySummaryController {
   @Autowired SummaryService summaryService;
 
   @GetMapping("/{year}/{month}")
-  public ResponseEntity<MonthlySummaryDTOResponse> findMonthlyExpenseSummary(
+  public ResponseEntity<MonthlySummaryDTOResponse> findMonthlySummary(
       @PathVariable Integer year, @PathVariable Integer month) {
-    return new ResponseEntity<>(summaryService.findSummary(year, month), HttpStatus.OK);
+    return new ResponseEntity<>(summaryService.findMonthlySummary(year, month), HttpStatus.OK);
   }
 }

@@ -4,5 +4,5 @@ import budget.control.project.dto.MonthlySummaryDTOResponse;
 
 public interface SummaryService {
 
-  MonthlySummaryDTOResponse findSummary(Integer year, Integer month);
+  MonthlySummaryDTOResponse findMonthlySummary(Integer year, Integer month);
 }

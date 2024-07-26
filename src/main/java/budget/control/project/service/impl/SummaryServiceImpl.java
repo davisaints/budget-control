@@ -14,7 +14,7 @@ public class SummaryServiceImpl implements SummaryService {
   @Autowired ExpenseRepository expenseRepository;
   @Autowired RevenueRepository revenueRepository;
 
-  public MonthlySummaryDTOResponse findSummary(Integer year, Integer month) {
+  public MonthlySummaryDTOResponse findMonthlySummary(Integer year, Integer month) {
     BigDecimal totalExpense = expenseRepository.findTotalMonthlyExpense(year, month);
     BigDecimal totalRevenue = revenueRepository.findTotalMonthlyRevenue(year, month);
 
