@@ -5,10 +5,9 @@ import budget.control.project.utils.BigDecimalUtil;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import lombok.EqualsAndHashCode;
+import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode(of = "id")
 @Table(name = "revenue")
 public class Revenue {
 
@@ -57,5 +56,18 @@ public class Revenue {
 
   public LocalDate getTransactionDate() {
     return transactionDate;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Revenue revenue = (Revenue) o;
+    return Objects.equals(id, revenue.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
