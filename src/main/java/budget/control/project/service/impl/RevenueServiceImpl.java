@@ -4,7 +4,6 @@ import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.model.Revenue;
-import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,9 +11,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RevenueServiceImpl implements RevenueService {
@@ -91,6 +88,8 @@ public class RevenueServiceImpl implements RevenueService {
       throw new DuplicateRevenueException(
           "Revenue with the given description and transaction date already exists");
     }
+
+    existingRevenue.update(revenueDTORequest);
 
     revenueRepository.save(existingRevenue);
 
