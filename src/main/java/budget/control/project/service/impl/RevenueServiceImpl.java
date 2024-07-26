@@ -71,13 +71,6 @@ public class RevenueServiceImpl implements RevenueService {
           "Revenue with the given description and transaction date already exists");
     }
 
-    if (revenueDTORequest.getCategoryName() == null) {
-      revenueDTORequest.setCategory(categoryRepository.findByName("Other"));
-    } else {
-      revenueDTORequest.setCategory(
-          categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
-    }
-
     Revenue revenue = revenueRepository.save(new Revenue(revenueDTORequest));
 
     return new RevenueDTOResponse(revenue);
@@ -98,15 +91,6 @@ public class RevenueServiceImpl implements RevenueService {
       throw new DuplicateRevenueException(
           "Revenue with the given description and transaction date already exists");
     }
-
-    if (revenueDTORequest.getCategoryName() == null) {
-      revenueDTORequest.setCategory(categoryRepository.findByName("Other"));
-    } else {
-      revenueDTORequest.setCategory(
-          categoryRepository.findByNameIgnoreCase(revenueDTORequest.getCategoryName()));
-    }
-
-    existingRevenue.update(revenueDTORequest, revenueDTORequest.getCategory());
 
     revenueRepository.save(existingRevenue);
 
