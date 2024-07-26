@@ -1,9 +1,8 @@
 package budget.control.project.repository;
 
 import budget.control.project.model.Revenue;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +21,10 @@ public interface RevenueRepository extends JpaRepository<Revenue, Long> {
   Revenue findByDescriptionAndTransactionDate(String description, LocalDate transactionDate);
 
   Page<Revenue> findByDescriptionContaining(String description, Pageable pageable);
+
+  @Query(
+      "SELECT COALESCE(SUM(r.amount), 0)"
+          + " FROM Revenue r "
+          + "WHERE YEAR(r.transactionDate) = :year AND MONTH(r.transactionDate) = :month")
+  BigDecimal findTotalMonthlyRevenue(@Param("year") Integer year, @Param("month") Integer month);
 }
