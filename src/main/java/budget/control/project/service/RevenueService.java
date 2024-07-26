@@ -15,8 +15,6 @@ public interface RevenueService {
 
   Page<RevenueDTOResponse> findByYearAndMonth(Integer year, Integer month, Pageable pageable);
 
-  Page<RevenueDTOResponse> getByYearAndMonth(Integer year, Integer month, Pageable pageable);
-
   RevenueDTOResponse postRevenue(RevenueDTORequest revenueDTORequest);
 
   RevenueDTOResponse putRevenue(RevenueDTORequest revenueDTORequest, Long id);
