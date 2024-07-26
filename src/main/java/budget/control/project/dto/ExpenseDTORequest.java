@@ -11,17 +11,17 @@ import org.hibernate.validator.constraints.Length;
 public class ExpenseDTORequest {
 
   @DecimalMin(value = "0.50")
-  BigDecimal amount;
+  private BigDecimal amount;
 
-  Category category;
+  private Category category;
 
-  String categoryName;
+  private String categoryName;
 
   @NotEmpty
   @Length(min = 2)
-  String description;
+  private String description;
 
-  LocalDate transactionDate;
+  private LocalDate transactionDate;
 
   public ExpenseDTORequest(
       BigDecimal amount, String categoryName, String description, LocalDate transactionDate) {
@@ -29,10 +29,6 @@ public class ExpenseDTORequest {
     this.categoryName = categoryName;
     this.description = description;
     this.transactionDate = transactionDate;
-  }
-
-  public String getDescription() {
-    return description;
   }
 
   public BigDecimal getAmount() {
@@ -49,6 +45,10 @@ public class ExpenseDTORequest {
 
   public String getCategoryName() {
     return categoryName;
+  }
+
+  public String getDescription() {
+    return description;
   }
 
   public LocalDate getTransactionDate() {

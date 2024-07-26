@@ -10,13 +10,13 @@ import org.hibernate.validator.constraints.Length;
 public class RevenueDTORequest {
 
   @DecimalMin(value = "0.50")
-  BigDecimal amount;
+  private BigDecimal amount;
 
   @NotEmpty
   @Length(min = 2)
-  String description;
+  private String description;
 
-  LocalDate transactionDate;
+  private LocalDate transactionDate;
 
   public RevenueDTORequest(BigDecimal amount, String description, LocalDate transactionDate) {
     this.description = description;

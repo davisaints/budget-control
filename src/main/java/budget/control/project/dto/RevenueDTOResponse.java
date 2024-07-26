@@ -9,13 +9,13 @@ import java.time.LocalDate;
 @JsonPropertyOrder({"category", "description", "amount", "transactionDate"})
 public class RevenueDTOResponse {
 
-  Long id;
+  private BigDecimal amount;
 
-  BigDecimal amount;
+  private String description;
 
-  String description;
+  private LocalDate transactionDate;
 
-  LocalDate transactionDate;
+  private Long id;
 
   public RevenueDTOResponse(Revenue revenue) {
     this.amount = BigDecimalUtil.roundWithCeiling(revenue.getAmount());
