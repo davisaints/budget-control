@@ -33,14 +33,6 @@ public class Expense {
     this.transactionDate = expenseDTORequest.getTransactionDate();
   }
 
-  public Expense(
-      BigDecimal amount, Category category, String description, LocalDate transactionDate) {
-    this.amount = BigDecimalUtil.roundWithCeiling(amount);
-    this.category = category;
-    this.description = description;
-    this.transactionDate = transactionDate;
-  }
-
   public Expense() {}
 
   public void update(ExpenseDTORequest expenseDTORequest, Category category) {
