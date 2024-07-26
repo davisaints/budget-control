@@ -15,8 +15,6 @@ public class RevenueDTOResponse {
 
   private LocalDate transactionDate;
 
-  private Long id;
-
   public RevenueDTOResponse(Revenue revenue) {
     this.amount = BigDecimalUtil.roundWithCeiling(revenue.getAmount());
     this.description = revenue.getDescription();
