@@ -19,11 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RevenueServiceImpl implements RevenueService {
 
-  @Autowired private CategoryRepository categoryRepository;
   @Autowired private RevenueRepository revenueRepository;
 
   @Override
-  public void delete(Long id) {
+  public void deleteRevenue(Long id) {
     Revenue revenue =
         revenueRepository
             .findById(id)
@@ -33,7 +32,7 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public Page<RevenueDTOResponse> getAll(String description, Pageable pageable) {
+  public Page<RevenueDTOResponse> findAll(String description, Pageable pageable) {
     if (description == null) {
       return revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
     } else {
@@ -44,7 +43,7 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public RevenueDTOResponse getById(Long id) {
+  public RevenueDTOResponse findById(Long id) {
     Revenue revenue =
         revenueRepository
             .findById(id)
@@ -54,7 +53,7 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public Page<RevenueDTOResponse> getByYearAndMonth(
+  public Page<RevenueDTOResponse> findByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
     if (year == null || month == null) {
       throw new IllegalArgumentException("Year and month must be provided");
@@ -64,7 +63,7 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public RevenueDTOResponse post(RevenueDTORequest revenueDTORequest) {
+  public RevenueDTOResponse postRevenue(RevenueDTORequest revenueDTORequest) {
     if (revenueRepository.findByDescriptionAndTransactionDate(
             revenueDTORequest.getDescription(), revenueDTORequest.getTransactionDate())
         != null) {
@@ -85,7 +84,7 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id) {
+  public RevenueDTOResponse putRevenue(RevenueDTORequest revenueDTORequest, Long id) {
     Revenue existingRevenue =
         revenueRepository
             .findById(id)

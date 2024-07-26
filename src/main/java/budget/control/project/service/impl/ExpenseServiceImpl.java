@@ -3,12 +3,15 @@ package budget.control.project.service.impl;
 import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
+import budget.control.project.exception.InvalidCategoryException;
+import budget.control.project.model.Category;
 import budget.control.project.model.Expense;
 import budget.control.project.repository.CategoryRepository;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +26,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   @Autowired ExpenseRepository expenseRepository;
 
   @Override
-  public void delete(Long id) {
+  public void deleteExpense(Long id) {
     Expense expense =
         expenseRepository
             .findById(id)
@@ -33,7 +36,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public Page<ExpenseDTOResponse> getAll(String description, Pageable pageable) {
+  public Page<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
     if (description == null) {
       return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
     } else {
@@ -44,7 +47,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public ExpenseDTOResponse getById(Long id) {
+  public ExpenseDTOResponse findById(Long id) {
     Expense expense =
         expenseRepository
             .findById(id)
@@ -54,7 +57,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public Page<ExpenseDTOResponse> getByYearAndMonth(
+  public Page<ExpenseDTOResponse> findByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
     if (year == null || month == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year and month must be provided");
@@ -64,7 +67,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest) {
+  public ExpenseDTOResponse postExpense(ExpenseDTORequest expenseDTORequest) {
     if (expenseRepository.findByDescriptionAndTransactionDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
         != null) {
@@ -96,7 +99,7 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id) {
+  public ExpenseDTOResponse putExpense(ExpenseDTORequest expenseDTORequest, Long id) {
     Expense existingExpense =
         expenseRepository
             .findById(id)

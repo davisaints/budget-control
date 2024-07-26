@@ -20,39 +20,40 @@ public class ExpenseController {
   @Autowired ExpenseService expenseService;
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> delete(@PathVariable Long id) {
-    expenseService.delete(id);
+  public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
+    expenseService.deleteExpense(id);
 
     return ResponseEntity.ok().build();
   }
 
   @GetMapping
-  public ResponseEntity<Page<ExpenseDTOResponse>> getAll(
+  public ResponseEntity<Page<ExpenseDTOResponse>> findAllExpenses(
       @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
-    return new ResponseEntity<>(expenseService.getAll(description, pageable), HttpStatus.OK);
+    return new ResponseEntity<>(expenseService.findAll(description, pageable), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ExpenseDTOResponse> getById(@PathVariable Long id) {
-    return new ResponseEntity<>(expenseService.getById(id), HttpStatus.OK);
+  public ResponseEntity<ExpenseDTOResponse> findExpenseById(@PathVariable Long id) {
+    return new ResponseEntity<>(expenseService.findById(id), HttpStatus.OK);
   }
 
   @GetMapping("/{year}/{month}")
-  public ResponseEntity<Page<ExpenseDTOResponse>> getByYearAndMonth(
+  public ResponseEntity<Page<ExpenseDTOResponse>> findExpenseByYearAndMonth(
       @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
     return new ResponseEntity<>(
-        expenseService.getByYearAndMonth(year, month, pageable), HttpStatus.OK);
+        expenseService.findByYearAndMonth(year, month, pageable), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<ExpenseDTOResponse> post(
+  public ResponseEntity<ExpenseDTOResponse> postExpense(
       @RequestBody @Valid ExpenseDTORequest expenseDTORequest) {
-    return new ResponseEntity<>(expenseService.post(expenseDTORequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(expenseService.postExpense(expenseDTORequest), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ExpenseDTOResponse> put(
+  public ResponseEntity<ExpenseDTOResponse> putExpense(
       @RequestBody @Valid ExpenseDTORequest expenseDTORequest, @PathVariable Long id) {
-    return new ResponseEntity<>(expenseService.put(expenseDTORequest, id), HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        expenseService.putExpense(expenseDTORequest, id), HttpStatus.CREATED);
   }
 }

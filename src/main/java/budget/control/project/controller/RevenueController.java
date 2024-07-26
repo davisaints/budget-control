@@ -20,39 +20,40 @@ public class RevenueController {
   @Autowired RevenueService revenueService;
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> delete(@PathVariable Long id) {
-    revenueService.delete(id);
+  public ResponseEntity<String> deleteRevenue(@PathVariable Long id) {
+    revenueService.deleteRevenue(id);
 
     return ResponseEntity.ok().build();
   }
 
   @GetMapping
-  public ResponseEntity<Page<RevenueDTOResponse>> getAll(
+  public ResponseEntity<Page<RevenueDTOResponse>> findAllRevenues(
       @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
-    return new ResponseEntity<>(revenueService.getAll(description, pageable), HttpStatus.OK);
+    return new ResponseEntity<>(revenueService.findAll(description, pageable), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<RevenueDTOResponse> getById(@PathVariable Long id) {
-    return new ResponseEntity<>(revenueService.getById(id), HttpStatus.OK);
+  public ResponseEntity<RevenueDTOResponse> findRevenueById(@PathVariable Long id) {
+    return new ResponseEntity<>(revenueService.findById(id), HttpStatus.OK);
   }
 
   @GetMapping("/{year}/{month}")
-  public ResponseEntity<Page<RevenueDTOResponse>> getByYearAndMonth(
+  public ResponseEntity<Page<RevenueDTOResponse>> findRevenueByYearAndMonth(
       @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
     return new ResponseEntity<>(
-        revenueService.getByYearAndMonth(year, month, pageable), HttpStatus.OK);
+        revenueService.findByYearAndMonth(year, month, pageable), HttpStatus.OK);
   }
 
   @PostMapping
   public ResponseEntity<RevenueDTOResponse> postRevenue(
       @RequestBody @Valid RevenueDTORequest revenueDTORequest) {
-    return new ResponseEntity<>(revenueService.post(revenueDTORequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(revenueService.postRevenue(revenueDTORequest), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<RevenueDTOResponse> put(
+  public ResponseEntity<RevenueDTOResponse> putRevenue(
       @RequestBody @Valid RevenueDTORequest revenueDTORequest, @PathVariable Long id) {
-    return new ResponseEntity<>(revenueService.put(revenueDTORequest, id), HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        revenueService.putRevenue(revenueDTORequest, id), HttpStatus.CREATED);
   }
 }

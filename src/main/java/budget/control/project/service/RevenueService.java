@@ -7,15 +7,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface RevenueService {
 
-  void delete(Long id);
+  void deleteRevenue(Long id);
 
-  Page<RevenueDTOResponse> getAll(String description, Pageable pageable);
+  Page<RevenueDTOResponse> findAll(String description, Pageable pageable);
 
-  RevenueDTOResponse getById(Long id);
+  RevenueDTOResponse findById(Long id);
+
+  Page<RevenueDTOResponse> findByYearAndMonth(Integer year, Integer month, Pageable pageable);
 
   Page<RevenueDTOResponse> getByYearAndMonth(Integer year, Integer month, Pageable pageable);
 
-  RevenueDTOResponse post(RevenueDTORequest revenueDTORequest);
+  RevenueDTOResponse postRevenue(RevenueDTORequest revenueDTORequest);
 
-  RevenueDTOResponse put(RevenueDTORequest revenueDTORequest, Long id);
+  RevenueDTOResponse putRevenue(RevenueDTORequest revenueDTORequest, Long id);
 }

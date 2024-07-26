@@ -7,15 +7,15 @@ import org.springframework.data.domain.Pageable;
 
 public interface ExpenseService {
 
-  void delete(Long id);
+  void deleteExpense(Long id);
 
-  Page<ExpenseDTOResponse> getAll(String description, Pageable pageable);
+  Page<ExpenseDTOResponse> findAll(String description, Pageable pageable);
 
-  ExpenseDTOResponse getById(Long id);
+  ExpenseDTOResponse findById(Long id);
 
-  Page<ExpenseDTOResponse> getByYearAndMonth(Integer year, Integer month, Pageable pageable);
+  Page<ExpenseDTOResponse> findByYearAndMonth(Integer year, Integer month, Pageable pageable);
 
-  ExpenseDTOResponse post(ExpenseDTORequest expenseDTORequest);
+  ExpenseDTOResponse postExpense(ExpenseDTORequest expenseDTORequest);
 
-  ExpenseDTOResponse put(ExpenseDTORequest expenseDTORequest, Long id);
+  ExpenseDTOResponse putExpense(ExpenseDTORequest expenseDTORequest, Long id);
 }
