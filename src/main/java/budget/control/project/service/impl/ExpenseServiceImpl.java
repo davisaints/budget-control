@@ -2,6 +2,7 @@ package budget.control.project.service.impl;
 
 import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
+import budget.control.project.dto.PaginationDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.exception.InvalidCategoryException;
 import budget.control.project.model.Category;
@@ -36,14 +37,26 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public Page<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
+  public PaginationDTOResponse<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
+    Page<ExpenseDTOResponse> expenseDTOResponsePage;
+
     if (description == null) {
-      return expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
+      expenseDTOResponsePage = expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
     } else {
-      return expenseRepository
-          .findByDescriptionContaining(description, pageable)
-          .map(ExpenseDTOResponse::new);
+      expenseDTOResponsePage =
+          expenseRepository
+              .findByDescriptionContaining(description, pageable)
+              .map(ExpenseDTOResponse::new);
     }
+    return new PaginationDTOResponse<ExpenseDTOResponse>()
+        .builder()
+        .setContent(expenseDTOResponsePage.getContent())
+        .setPage(expenseDTOResponsePage.getNumber() + 1)
+        .setSize(expenseDTOResponsePage.getSize())
+        .setTotalElements(expenseDTOResponsePage.getTotalElements())
+        .setTotalPages(expenseDTOResponsePage.getTotalPages())
+        .setLast(expenseDTOResponsePage.isLast())
+        .build();
   }
 
   @Override
@@ -57,13 +70,24 @@ public class ExpenseServiceImpl implements ExpenseService {
   }
 
   @Override
-  public Page<ExpenseDTOResponse> findByYearAndMonth(
+  public PaginationDTOResponse<ExpenseDTOResponse> findByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
     if (year == null || month == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year and month must be provided");
     }
 
-    return expenseRepository.findByYearAndMonth(year, month, pageable).map(ExpenseDTOResponse::new);
+    Page<ExpenseDTOResponse> expenseDTOResponsePage =
+        expenseRepository.findByYearAndMonth(year, month, pageable).map(ExpenseDTOResponse::new);
+
+    return new PaginationDTOResponse<ExpenseDTOResponse>()
+        .builder()
+        .setContent(expenseDTOResponsePage.getContent())
+        .setPage(expenseDTOResponsePage.getNumber() + 1)
+        .setSize(expenseDTOResponsePage.getSize())
+        .setTotalElements(expenseDTOResponsePage.getTotalElements())
+        .setTotalPages(expenseDTOResponsePage.getTotalPages())
+        .setLast(expenseDTOResponsePage.isLast())
+        .build();
   }
 
   @Override
@@ -78,6 +102,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     if (expenseDTORequest.getCategoryName() == null
         || expenseDTORequest.getCategoryName().isEmpty()) {
       expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
+
     } else {
       expenseDTORequest.setCategory(
           categoryRepository
