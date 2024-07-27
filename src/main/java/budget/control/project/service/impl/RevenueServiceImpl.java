@@ -1,5 +1,6 @@
 package budget.control.project.service.impl;
 
+import budget.control.project.dto.PaginationDTOResponse;
 import budget.control.project.dto.RevenueDTORequest;
 import budget.control.project.dto.RevenueDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
@@ -29,14 +30,26 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public Page<RevenueDTOResponse> findAll(String description, Pageable pageable) {
+  public PaginationDTOResponse<RevenueDTOResponse> findAll(String description, Pageable pageable) {
+    Page<RevenueDTOResponse> revenueDTOResponsePage;
+
     if (description == null) {
-      return revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
+      revenueDTOResponsePage = revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
     } else {
-      return revenueRepository
-          .findByDescriptionContaining(description, pageable)
-          .map(RevenueDTOResponse::new);
+      revenueDTOResponsePage =
+          revenueRepository
+              .findByDescriptionContaining(description, pageable)
+              .map(RevenueDTOResponse::new);
     }
+    return new PaginationDTOResponse<RevenueDTOResponse>()
+        .builder()
+        .setContent(revenueDTOResponsePage.getContent())
+        .setPage(revenueDTOResponsePage.getNumber() + 1)
+        .setSize(revenueDTOResponsePage.getSize())
+        .setTotalElements(revenueDTOResponsePage.getTotalElements())
+        .setTotalPages(revenueDTOResponsePage.getTotalPages())
+        .setLast(revenueDTOResponsePage.isLast())
+        .build();
   }
 
   @Override
@@ -50,13 +63,20 @@ public class RevenueServiceImpl implements RevenueService {
   }
 
   @Override
-  public Page<RevenueDTOResponse> findByYearAndMonth(
+  public PaginationDTOResponse<RevenueDTOResponse> findByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
-    if (year == null || month == null) {
-      throw new IllegalArgumentException("Year and month must be provided");
-    }
+    Page<RevenueDTOResponse> revenueDTOResponsePage =
+        revenueRepository.findByYearAndMonth(year, month, pageable).map(RevenueDTOResponse::new);
 
-    return revenueRepository.findByYearAndMonth(year, month, pageable).map(RevenueDTOResponse::new);
+    return new PaginationDTOResponse<RevenueDTOResponse>()
+        .builder()
+        .setContent(revenueDTOResponsePage.getContent())
+        .setPage(revenueDTOResponsePage.getNumber() + 1)
+        .setSize(revenueDTOResponsePage.getSize())
+        .setTotalElements(revenueDTOResponsePage.getTotalElements())
+        .setTotalPages(revenueDTOResponsePage.getTotalPages())
+        .setLast(revenueDTOResponsePage.isLast())
+        .build();
   }
 
   @Override

@@ -2,10 +2,10 @@ package budget.control.project.controller;
 
 import budget.control.project.dto.ExpenseDTORequest;
 import budget.control.project.dto.ExpenseDTOResponse;
+import budget.control.project.dto.PaginationDTOResponse;
 import budget.control.project.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class ExpenseController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<ExpenseDTOResponse>> findAllExpenses(
+  public ResponseEntity<PaginationDTOResponse<ExpenseDTOResponse>> findAllExpenses(
       @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
     return new ResponseEntity<>(expenseService.findAll(description, pageable), HttpStatus.OK);
   }
@@ -38,7 +38,7 @@ public class ExpenseController {
   }
 
   @GetMapping("/{year}/{month}")
-  public ResponseEntity<Page<ExpenseDTOResponse>> findExpenseByYearAndMonth(
+  public ResponseEntity<PaginationDTOResponse<ExpenseDTOResponse>> findExpenseByYearAndMonth(
       @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
     return new ResponseEntity<>(
         expenseService.findByYearAndMonth(year, month, pageable), HttpStatus.OK);
