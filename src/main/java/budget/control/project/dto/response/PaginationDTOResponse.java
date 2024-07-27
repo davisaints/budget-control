@@ -1,4 +1,4 @@
-package budget.control.project.dto;
+package budget.control.project.dto.response;
 
 import java.util.ArrayList;
 import java.util.List;

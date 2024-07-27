@@ -1,6 +1,6 @@
 package budget.control.project.repository;
 
-import budget.control.project.dto.CategoryExpenseDTOResponse;
+import budget.control.project.dto.response.CategoryExpenseDTOResponse;
 import budget.control.project.model.Expense;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   BigDecimal findTotalMonthlyExpense(@Param("year") Integer year, @Param("month") Integer month);
 
   @Query(
-      "SELECT new budget.control.project.dto.CategoryExpenseDTOResponse(c.name, SUM(e.amount)) "
+      "SELECT new budget.control.project.dto.response.CategoryExpenseDTOResponse(c.name, SUM(e.amount)) "
           + "FROM Expense e JOIN e.category c "
           + "WHERE YEAR(e.transactionDate) = :year AND MONTH(e.transactionDate) = :month "
           + "GROUP BY c.name "

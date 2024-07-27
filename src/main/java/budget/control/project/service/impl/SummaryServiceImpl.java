@@ -1,6 +1,6 @@
 package budget.control.project.service.impl;
 
-import budget.control.project.dto.MonthlySummaryDTOResponse;
+import budget.control.project.dto.response.MonthlySummaryDTOResponse;
 import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.SummaryService;

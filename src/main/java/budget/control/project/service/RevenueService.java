@@ -1,8 +1,8 @@
 package budget.control.project.service;
 
-import budget.control.project.dto.PaginationDTOResponse;
-import budget.control.project.dto.RevenueDTORequest;
-import budget.control.project.dto.RevenueDTOResponse;
+import budget.control.project.dto.request.RevenueDTORequest;
+import budget.control.project.dto.response.PaginationDTOResponse;
+import budget.control.project.dto.response.RevenueDTOResponse;
 import org.springframework.data.domain.Pageable;
 
 public interface RevenueService {

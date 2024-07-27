@@ -1,8 +1,8 @@
 package budget.control.project.controller;
 
-import budget.control.project.dto.ExpenseDTORequest;
-import budget.control.project.dto.ExpenseDTOResponse;
-import budget.control.project.dto.PaginationDTOResponse;
+import budget.control.project.dto.request.ExpenseDTORequest;
+import budget.control.project.dto.response.ExpenseDTOResponse;
+import budget.control.project.dto.response.PaginationDTOResponse;
 import budget.control.project.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

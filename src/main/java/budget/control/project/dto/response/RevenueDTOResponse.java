@@ -1,4 +1,4 @@
-package budget.control.project.dto;
+package budget.control.project.dto.response;
 
 import budget.control.project.model.Revenue;
 import budget.control.project.utils.BigDecimalUtil;

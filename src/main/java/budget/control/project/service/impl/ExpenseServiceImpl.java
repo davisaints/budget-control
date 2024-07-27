@@ -1,8 +1,8 @@
 package budget.control.project.service.impl;
 
-import budget.control.project.dto.ExpenseDTORequest;
-import budget.control.project.dto.ExpenseDTOResponse;
-import budget.control.project.dto.PaginationDTOResponse;
+import budget.control.project.dto.request.ExpenseDTORequest;
+import budget.control.project.dto.response.ExpenseDTOResponse;
+import budget.control.project.dto.response.PaginationDTOResponse;
 import budget.control.project.exception.DuplicateRevenueException;
 import budget.control.project.exception.InvalidCategoryException;
 import budget.control.project.model.Category;

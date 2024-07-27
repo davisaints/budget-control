@@ -1,6 +1,6 @@
 package budget.control.project.service;
 
-import budget.control.project.dto.MonthlySummaryDTOResponse;
+import budget.control.project.dto.response.MonthlySummaryDTOResponse;
 
 public interface SummaryService {
 

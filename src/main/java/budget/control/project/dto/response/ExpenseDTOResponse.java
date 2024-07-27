@@ -1,4 +1,4 @@
-package budget.control.project.dto;
+package budget.control.project.dto.response;
 
 import budget.control.project.model.Category;
 import budget.control.project.model.Expense;

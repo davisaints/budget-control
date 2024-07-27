@@ -1,6 +1,6 @@
 package budget.control.project.model;
 
-import budget.control.project.dto.ExpenseDTORequest;
+import budget.control.project.dto.request.ExpenseDTORequest;
 import budget.control.project.utils.BigDecimalUtil;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
