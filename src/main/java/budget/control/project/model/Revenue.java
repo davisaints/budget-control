@@ -28,6 +28,13 @@ public class Revenue {
     this.transactionDate = revenueDTORequest.getTransactionDate();
   }
 
+  public Revenue(Long id, BigDecimal amount, String description, LocalDate transactionDate) {
+    this.id = id;
+    this.amount = BigDecimalUtil.roundWithCeiling(amount);
+    this.description = description;
+    this.transactionDate = transactionDate;
+  }
+
   public Revenue() {}
 
   public void update(RevenueDTORequest revenueDTORequest) {
