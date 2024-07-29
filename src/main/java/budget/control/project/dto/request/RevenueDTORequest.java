@@ -9,7 +9,8 @@ import java.time.LocalDate;
 
 public class RevenueDTORequest {
 
-  @DecimalMin(value = "0.50")
+  @DecimalMin(value = "0.10", inclusive = true, message = "Transaction should be greater than 0.10")
+  @NotNull(message = "Amount cannot be null")
   private BigDecimal amount;
 
   @NotBlank(message = "Description is mandatory")

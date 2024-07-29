@@ -10,7 +10,8 @@ import java.time.LocalDate;
 
 public class ExpenseDTORequest {
 
-  @DecimalMin(value = "0.05")
+  @DecimalMin(value = "0.10", inclusive = true, message = "Transaction should be greater than 0.10")
+  @NotNull(message = "Amount cannot be null")
   private BigDecimal amount;
 
   private Category category;
