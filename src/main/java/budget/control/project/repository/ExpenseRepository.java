@@ -21,9 +21,13 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   Page<Expense> findByYearAndMonth(
       @Param("year") Integer year, @Param("month") Integer month, Pageable pageable);
 
+  @Query(
+      "SELECT e FROM Expense e WHERE LOWER(e.description) = LOWER(:description) AND e.transactionDate = :transactionDate")
   Expense findByDescriptionAndTransactionDate(String description, LocalDate transactionDate);
 
-  Page<Expense> findByDescriptionContaining(String description, Pageable pageable);
+  @Query("SELECT e FROM Expense e WHERE e.description LIKE %:description%")
+  Page<Expense> findByDescriptionContaining(
+      @Param("description") String description, Pageable pageable);
 
   @Query(
       "SELECT COALESCE(SUM(e.amount), 0)"
