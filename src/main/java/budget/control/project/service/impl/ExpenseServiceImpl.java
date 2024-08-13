@@ -3,7 +3,7 @@ package budget.control.project.service.impl;
 import budget.control.project.dto.request.ExpenseDTORequest;
 import budget.control.project.dto.response.ExpenseDTOResponse;
 import budget.control.project.dto.response.PaginationDTOResponse;
-import budget.control.project.exception.DuplicateRevenueException;
+import budget.control.project.exception.DuplicateExpenseException;
 import budget.control.project.exception.InvalidCategoryException;
 import budget.control.project.model.Category;
 import budget.control.project.model.Expense;
@@ -95,7 +95,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     if (expenseRepository.findByDescriptionAndTransactionDate(
             expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
         != null) {
-      throw new DuplicateRevenueException(
+      throw new DuplicateExpenseException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
@@ -135,7 +135,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate());
 
     if (duplicateExpense != null && !Objects.equals(duplicateExpense.getId(), id)) {
-      throw new DuplicateRevenueException(
+      throw new DuplicateExpenseException(
           "Duplicate entries with an existing description and month are not allowed");
     }
 
