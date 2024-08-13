@@ -51,6 +51,36 @@ class ExpenseServiceImplTest {
   void tearDown() {}
 
   @Test
+  void whenSavingDuplicatedExpense_ThenShouldThrowException() {
+    // Given a duplicated expense request
+    ExpenseDTORequest duplicatedExpenseDTORequest =
+        new ExpenseDTORequest(
+            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)),
+            "Food",
+            "Lunch",
+            LocalDate.of(2020, 10, 10));
+
+    given(
+            expenseRepository.findByDescriptionAndTransactionDate(
+                duplicatedExpenseDTORequest.getDescription(),
+                duplicatedExpenseDTORequest.getTransactionDate()))
+        .willReturn(expense);
+
+    // When the expense service tries to save the duplicated expense
+    DuplicateExpenseException duplicateExpenseException =
+        assertThrows(
+            DuplicateExpenseException.class,
+            () -> {
+              expenseService.postExpense(duplicatedExpenseDTORequest);
+            });
+
+    // Then an exception should be thrown with the appropriate message
+    assertEquals(
+        "Duplicate entries with an existing description and month are not allowed",
+        duplicateExpenseException.getMessage());
+  }
+
+  @Test
   void whenSavingValidExpense_thenShouldReturnMatchingDtoResponse() {
     // Given a valid expense
     given(
