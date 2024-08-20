@@ -63,6 +63,10 @@ public class Expense {
     return category;
   }
 
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
   public String getDescription() {
     return description;
   }
