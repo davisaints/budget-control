@@ -76,68 +76,6 @@ class ExpenseServiceImplTest {
   }
 
   @Test
-  void givenValidExpense_whenSaving_thenShouldReturnMatchingDtoResponse() {
-    // Arrange
-    ExpenseDTORequest request =
-        new ExpenseDTORequest(
-            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)),
-            "Food",
-            "Lunch",
-            LocalDate.of(2020, 10, 10));
-
-    Expense expense = new Expense(request);
-
-    Category category = new Category("Food", 1L);
-
-    given(
-            expenseRepository.findByDescriptionAndTransactionDate(
-                request.getDescription(), request.getTransactionDate()))
-        .willReturn(null);
-    given(categoryRepository.findByNameIgnoreCase(category.getName()))
-        .willReturn(Optional.of(category));
-    given(expenseRepository.save(expense)).willReturn(expense);
-
-    // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
-
-    // Assert
-    assertNotNull(response);
-    assertEquals(expense.getAmount(), response.getAmount());
-    assertEquals(expense.getCategory(), response.getCategory());
-    assertEquals(expense.getDescription(), response.getDescription());
-    assertEquals(expense.getTransactionDate(), response.getTransactionDate());
-  }
-
-  @Test
-  void givenNullCategoryName_whenSaving_thenShouldSetDefaultCategory() {
-    // Arrange
-    ExpenseDTORequest request =
-        new ExpenseDTORequest(
-            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)),
-            null,
-            "Lunch",
-            LocalDate.of(2020, 10, 10));
-
-    Expense expense = new Expense(request);
-    expense.setCategory(defaultCategory);
-
-    given(
-            expenseRepository.findByDescriptionAndTransactionDate(
-                request.getDescription(), request.getTransactionDate()))
-        .willReturn(null);
-    given(categoryRepository.findByName("Other")).willReturn(defaultCategory);
-    given(expenseRepository.save(expense)).willReturn(expense);
-
-    // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
-
-    // Assert
-    assertNotNull(response);
-    assertEquals(defaultCategory, response.getCategory());
-    then(categoryRepository).should().findByName("Other");
-  }
-
-  @Test
   void givenEmptyCategoryName_whenSaving_thenShouldSetDefaultCategory() {
     // Arrange
     ExpenseDTORequest request =
@@ -187,5 +125,67 @@ class ExpenseServiceImplTest {
         });
 
     then(expenseRepository).should(never()).save(new Expense(request));
+  }
+
+  @Test
+  void givenNullCategoryName_whenSaving_thenShouldSetDefaultCategory() {
+    // Arrange
+    ExpenseDTORequest request =
+        new ExpenseDTORequest(
+            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)),
+            null,
+            "Lunch",
+            LocalDate.of(2020, 10, 10));
+
+    Expense expense = new Expense(request);
+    expense.setCategory(defaultCategory);
+
+    given(
+            expenseRepository.findByDescriptionAndTransactionDate(
+                request.getDescription(), request.getTransactionDate()))
+        .willReturn(null);
+    given(categoryRepository.findByName("Other")).willReturn(defaultCategory);
+    given(expenseRepository.save(expense)).willReturn(expense);
+
+    // Act
+    ExpenseDTOResponse response = expenseService.postExpense(request);
+
+    // Assert
+    assertNotNull(response);
+    assertEquals(defaultCategory, response.getCategory());
+    then(categoryRepository).should().findByName("Other");
+  }
+
+  @Test
+  void givenValidExpense_whenSaving_thenShouldReturnMatchingDtoResponse() {
+    // Arrange
+    ExpenseDTORequest request =
+        new ExpenseDTORequest(
+            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)),
+            "Food",
+            "Lunch",
+            LocalDate.of(2020, 10, 10));
+
+    Expense expense = new Expense(request);
+
+    Category category = new Category("Food", 1L);
+
+    given(
+            expenseRepository.findByDescriptionAndTransactionDate(
+                request.getDescription(), request.getTransactionDate()))
+        .willReturn(null);
+    given(categoryRepository.findByNameIgnoreCase(category.getName()))
+        .willReturn(Optional.of(category));
+    given(expenseRepository.save(expense)).willReturn(expense);
+
+    // Act
+    ExpenseDTOResponse response = expenseService.postExpense(request);
+
+    // Assert
+    assertNotNull(response);
+    assertEquals(expense.getAmount(), response.getAmount());
+    assertEquals(expense.getCategory(), response.getCategory());
+    assertEquals(expense.getDescription(), response.getDescription());
+    assertEquals(expense.getTransactionDate(), response.getTransactionDate());
   }
 }
