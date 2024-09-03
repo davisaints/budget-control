@@ -32,6 +32,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseServiceImplTest {
@@ -66,24 +68,6 @@ class ExpenseServiceImplTest {
   @AfterEach
   void tearDown() {
     expenseRepository.deleteAll();
-  }
-
-  @Test
-  void givenExpense_whenFindById_thenReturnExpenseDtoResponse() {
-    // Arrange
-    Long expenseId = 1L;
-    given(expenseRepository.findById(expenseId)).willReturn(Optional.of(expense));
-
-    // Act
-    ExpenseDTOResponse result = expenseService.findById(expenseId);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(expense.getAmount(), result.getAmount());
-    assertEquals(expense.getCategory(), result.getCategory());
-    assertEquals(expense.getDescription(), result.getDescription());
-    assertEquals(expense.getTransactionDate(), result.getTransactionDate());
-    then(expenseRepository).should().findById(expenseId);
   }
 
   @Test
@@ -126,68 +110,6 @@ class ExpenseServiceImplTest {
   }
 
   @Test
-  void givenValidExpense_whenSaving_thenReturnMatchingDtoResponse() {
-    // Arrange
-    given(
-            expenseRepository.findByDescriptionAndTransactionDate(
-                request.getDescription(), request.getTransactionDate()))
-        .willReturn(null);
-    given(categoryRepository.findByNameIgnoreCase(category.getName()))
-        .willReturn(Optional.of(category));
-    given(expenseRepository.save(expense)).willReturn(expense);
-
-    // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
-
-    // Assert
-    assertNotNull(response);
-    assertEquals(expense.getAmount(), response.getAmount());
-    assertEquals(expense.getCategory(), response.getCategory());
-    assertEquals(expense.getDescription(), response.getDescription());
-    assertEquals(expense.getTransactionDate(), response.getTransactionDate());
-  }
-
-  @Test
-  void givenNoDescription_whenFindAll_thenReturnAllExpenses() {
-    // Arrange
-    Pageable pageable = PageRequest.of(0, 10);
-    Page<Expense> expensePage = new PageImpl<>(List.of(expense), pageable, 1);
-    given(expenseRepository.findAll(pageable)).willReturn(expensePage);
-
-    // Act
-    PaginationDTOResponse<ExpenseDTOResponse> result = expenseService.findAll(null, pageable);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(1, result.getTotalElements());
-    assertEquals(1, result.getTotalPages());
-    assertTrue(result.isLast());
-    then(expenseRepository).should().findAll(pageable);
-  }
-
-  @Test
-  void givenNullCategoryName_whenSaving_thenSetDefaultCategory() {
-    // Arrange
-    request.setCategoryName(null);
-    expense.setCategory(defaultCategory);
-
-    given(
-            expenseRepository.findByDescriptionAndTransactionDate(
-                request.getDescription(), request.getTransactionDate()))
-        .willReturn(null);
-    given(categoryRepository.findByName("Other")).willReturn(defaultCategory);
-    given(expenseRepository.save(expense)).willReturn(expense);
-
-    // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
-
-    // Assert
-    assertNotNull(response);
-    assertEquals(defaultCategory, response.getCategory());
-    then(categoryRepository).should().findByName("Other");
-  }
-
-  @Test
   void givenEmptyCategoryName_whenSaving_thenSetDefaultCategory() {
     // Arrange
     request.setCategoryName("");
@@ -207,6 +129,52 @@ class ExpenseServiceImplTest {
     assertNotNull(response);
     assertEquals(defaultCategory, response.getCategory());
     then(categoryRepository).should().findByName("Other");
+  }
+
+  @Test
+  void givenExpense_whenFindById_thenReturnExpenseDtoResponse() {
+    // Arrange
+    Long expenseId = 1L;
+    given(expenseRepository.findById(expenseId)).willReturn(Optional.of(expense));
+
+    // Act
+    ExpenseDTOResponse result = expenseService.findById(expenseId);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(expense.getAmount(), result.getAmount());
+    assertEquals(expense.getCategory(), result.getCategory());
+    assertEquals(expense.getDescription(), result.getDescription());
+    assertEquals(expense.getTransactionDate(), result.getTransactionDate());
+    then(expenseRepository).should().findById(expenseId);
+  }
+
+  @Test
+  void givenExistingExpense_whenUpdating_thenReturnExpenseDtoResponseWithUpdatedFields() {
+    // Arrange
+    Long existingExpenseId = 1L;
+    ExpenseDTORequest updatedExpense =
+        new ExpenseDTORequest(
+            BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(200)),
+            "Food",
+            "Party",
+            LocalDate.of(2021, 12, 30));
+
+    given(expenseRepository.findById(existingExpenseId)).willReturn(Optional.of(expense));
+    given(
+            expenseRepository.findByDescriptionAndTransactionDate(
+                updatedExpense.getDescription(), updatedExpense.getTransactionDate()))
+        .willReturn(null);
+    given(categoryRepository.findByNameIgnoreCase(updatedExpense.getCategoryName()))
+        .willReturn(Optional.of(category));
+
+    // Act
+    expense.update(updatedExpense, category);
+
+    // Assert
+    assertEquals(expense.getAmount(), updatedExpense.getAmount());
+    assertEquals(expense.getDescription(), updatedExpense.getDescription());
+    assertEquals(expense.getTransactionDate(), updatedExpense.getTransactionDate());
   }
 
   @Test
@@ -250,6 +218,69 @@ class ExpenseServiceImplTest {
   }
 
   @Test
+  void givenNoDescription_whenFindAll_thenReturnAllExpenses() {
+    // Arrange
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Expense> expensePage = new PageImpl<>(List.of(expense), pageable, 1);
+    given(expenseRepository.findAll(pageable)).willReturn(expensePage);
+
+    // Act
+    PaginationDTOResponse<ExpenseDTOResponse> result = expenseService.findAll(null, pageable);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(1, result.getTotalPages());
+    assertTrue(result.isLast());
+    then(expenseRepository).should().findAll(pageable);
+  }
+
+  @Test
+  void givenNullCategoryName_whenSaving_thenSetDefaultCategory() {
+    // Arrange
+    request.setCategoryName(null);
+    expense.setCategory(defaultCategory);
+
+    given(
+            expenseRepository.findByDescriptionAndTransactionDate(
+                request.getDescription(), request.getTransactionDate()))
+        .willReturn(null);
+    given(categoryRepository.findByName("Other")).willReturn(defaultCategory);
+    given(expenseRepository.save(expense)).willReturn(expense);
+
+    // Act
+    ExpenseDTOResponse response = expenseService.postExpense(request);
+
+    // Assert
+    assertNotNull(response);
+    assertEquals(defaultCategory, response.getCategory());
+    then(categoryRepository).should().findByName("Other");
+  }
+
+  @Test
+  void givenNullYearOrMonth_whenFindByYearAndMonth_thenThrowBadRequestException() {
+    // Arrange
+    Pageable pageable = PageRequest.of(0, 10);
+
+    // Act & Assert
+    ResponseStatusException exception =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> expenseService.findByYearAndMonth(null, 10, pageable));
+
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+    assertEquals("Year and month must be provided", exception.getReason());
+
+    exception =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> expenseService.findByYearAndMonth(2020, null, pageable));
+
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+    assertEquals("Year and month must be provided", exception.getReason());
+  }
+
+  @Test
   void givenSavedExpense_whenDelete_thenRemoveFromDB() {
     // Arrange
     Long expenseId = 1L;
@@ -260,5 +291,26 @@ class ExpenseServiceImplTest {
 
     // Assert
     then(expenseRepository).should().delete(expense);
+  }
+
+  @Test
+  void givenValidYearAndMonth_whenFindByYearAndMonth_thenReturnFilteredExpenses() {
+    // Arrange
+    int year = 2020;
+    int month = 10;
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Expense> expensePage = new PageImpl<>(List.of(expense), pageable, 1);
+    given(expenseRepository.findByYearAndMonth(year, month, pageable)).willReturn(expensePage);
+
+    // Act
+    PaginationDTOResponse<ExpenseDTOResponse> result =
+        expenseService.findByYearAndMonth(year, month, pageable);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(1, result.getTotalPages());
+    assertTrue(result.isLast());
+    then(expenseRepository).should().findByYearAndMonth(year, month, pageable);
   }
 }
