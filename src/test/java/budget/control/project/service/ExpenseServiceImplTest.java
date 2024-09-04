@@ -160,14 +160,6 @@ class ExpenseServiceImplTest {
             "Party",
             LocalDate.of(2021, 12, 30));
 
-    given(expenseRepository.findById(existingExpenseId)).willReturn(Optional.of(expense));
-    given(
-            expenseRepository.findByDescriptionAndTransactionDate(
-                updatedExpense.getDescription(), updatedExpense.getTransactionDate()))
-        .willReturn(null);
-    given(categoryRepository.findByNameIgnoreCase(updatedExpense.getCategoryName()))
-        .willReturn(Optional.of(category));
-
     // Act
     expense.update(updatedExpense, category);
 
@@ -233,6 +225,24 @@ class ExpenseServiceImplTest {
     assertEquals(1, result.getTotalPages());
     assertTrue(result.isLast());
     then(expenseRepository).should().findAll(pageable);
+  }
+
+  @Test
+  void givenNonExistingId_whenPutExpense_thenThrowEntityNotFoundException() {
+    // Arrange
+    Long nonExistingId = 1L;
+    given(expenseRepository.findById(nonExistingId)).willReturn(Optional.empty());
+
+    // Act
+    EntityNotFoundException exception =
+        assertThrows(
+            EntityNotFoundException.class,
+            () -> {
+              expenseService.putExpense(request, nonExistingId);
+            });
+
+    // Assert
+    assertEquals("Expense not found with id: " + nonExistingId, exception.getMessage());
   }
 
   @Test
