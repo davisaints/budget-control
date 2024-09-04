@@ -136,7 +136,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     if (duplicateExpense != null && !Objects.equals(duplicateExpense.getId(), id)) {
       throw new DuplicateExpenseException(
-          "Duplicate entries with an existing description and month are not allowed");
+          "An expense with the same description and month already exists");
     }
 
     if (expenseDTORequest.getCategoryName() == null
