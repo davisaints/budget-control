@@ -14,21 +14,27 @@ import org.springframework.stereotype.Repository;
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {
 
   @Query(
-      "SELECT r FROM Revenue r"
-          + " WHERE YEAR(r.transactionDate) = :year AND MONTH(r.transactionDate) = :month")
+      "SELECT r FROM Revenue r "
+          + "WHERE EXTRACT(YEAR FROM r.transactionDate) = :year "
+          + "AND EXTRACT(MONTH FROM r.transactionDate) = :month")
   Page<Revenue> findByYearAndMonth(
       @Param("year") Integer year, @Param("month") Integer month, Pageable pageable);
 
   @Query(
-      "SELECT r FROM Revenue r WHERE LOWER(r.description) = LOWER(:description) AND r.transactionDate = :transactionDate")
-  Revenue findByDescriptionAndTransactionDate(String description, LocalDate transactionDate);
+      "SELECT r FROM Revenue r WHERE r.description ILIKE :description "
+          + "AND r.transactionDate = :transactionDate")
+  Revenue findByDescriptionAndTransactionDate(
+      @Param("description") String description,
+      @Param("transactionDate") LocalDate transactionDate);
 
-  @Query("SELECT r FROM Revenue r WHERE r.description LIKE %:description%")
-  Page<Revenue> findByDescriptionContaining(String description, Pageable pageable);
+  @Query("SELECT r FROM Revenue r WHERE r.description ILIKE %:description%")
+  Page<Revenue> findByDescriptionContaining(
+      @Param("description") String description, Pageable pageable);
 
   @Query(
-      "SELECT COALESCE(SUM(r.amount), 0)"
-          + " FROM Revenue r "
-          + "WHERE YEAR(r.transactionDate) = :year AND MONTH(r.transactionDate) = :month")
+      "SELECT COALESCE(SUM(r.amount), 0) "
+          + "FROM Revenue r "
+          + "WHERE EXTRACT(YEAR FROM r.transactionDate) = :year "
+          + "AND EXTRACT(MONTH FROM r.transactionDate) = :month")
   BigDecimal findTotalMonthlyRevenue(@Param("year") Integer year, @Param("month") Integer month);
 }
