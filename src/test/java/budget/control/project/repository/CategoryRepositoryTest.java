@@ -3,6 +3,7 @@ package budget.control.project.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import budget.control.project.model.Category;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +15,18 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class CategoryRepositoryTest {
 
-  @Autowired CategoryRepository categoryRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   @BeforeEach
   void setUp() {
-    categoryRepository.save(new Category("Food"));
+    if (categoryRepository.findByName("Food") == null) {
+      categoryRepository.save(new Category("Food"));
+    }
   }
 
-  @BeforeEach
+  @AfterEach
   void tearDown() {
-    categoryRepository.delete(categoryRepository.findByName("Food"));
+    categoryRepository.deleteAll();
   }
 
   @Test
