@@ -23,7 +23,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "8080:8080"
+      - "${APPLICATION_PORT}:8080"
     restart: always
 
 volumes:
