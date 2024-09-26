@@ -152,7 +152,6 @@ class ExpenseServiceImplTest {
   @Test
   void givenExistingExpense_whenUpdating_thenReturnExpenseDtoResponseWithUpdatedFields() {
     // Arrange
-    Long existingExpenseId = 1L;
     ExpenseDTORequest updatedExpense =
         new ExpenseDTORequest(
             BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(200)),
