@@ -101,6 +101,7 @@
     </dependencies>
 
     <build>
+        <finalName>budget-control</finalName>
         <plugins>
             <!-- Spring Boot Maven Plugin -->
             <plugin>
