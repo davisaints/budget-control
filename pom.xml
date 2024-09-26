@@ -114,11 +114,6 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>9.22.3</version>
-                <configuration>
-                    <url>jdbc:mysql://0.0.0.0:3307/budgetControl</url>
-                    <user>root</user>
-                    <password />
-                </configuration>
             </plugin>
 
             <!-- Surefire Plugin -->
