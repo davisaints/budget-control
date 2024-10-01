@@ -52,7 +52,6 @@ public class ExpenseServiceImplTest {
   @BeforeEach
   void setup() {
     defaultCategory = new Category("Other", 1L);
-
     category = new Category("Food", 2L);
 
     request =
