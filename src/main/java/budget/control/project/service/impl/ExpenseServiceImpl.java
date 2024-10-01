@@ -96,7 +96,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             expenseDTORequest.getDescription(), expenseDTORequest.getTransactionDate())
         != null) {
       throw new DuplicateExpenseException(
-          "Duplicate entries with an existing description and month are not allowed");
+          "Expense with the given description and transaction date already exists");
     }
 
     if (expenseDTORequest.getCategoryName() == null

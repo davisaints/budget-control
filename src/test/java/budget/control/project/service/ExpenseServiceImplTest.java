@@ -106,7 +106,7 @@ public class ExpenseServiceImplTest {
 
     // Assert
     assertEquals(
-        "Duplicate entries with an existing description and month are not allowed",
+        "Expense with the given description and transaction date already exists",
         exception.getMessage());
   }
 
