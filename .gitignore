@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### ASDF
+.tool-versions
+
 ### Env files ###
 .env
 .env.dev
