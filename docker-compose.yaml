@@ -1,30 +1,25 @@
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION}
-    container_name: ${POSTGRES_CONTAINER_NAME}
+    image: postgres:14
+    container_name: postgresql-db
     environment:
+      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - 5432:5432
     restart: unless-stopped
 
   budget-control:
     build: .
     container_name: budget-control
     depends_on:
-      - postgres
+      - postgresql-db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "${APPLICATION_PORT}:8080"
+      - 8080:8080
     restart: always
-
-volumes:
-  postgres_data:
