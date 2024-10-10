@@ -12,7 +12,9 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RevenueServiceImpl implements RevenueService {
@@ -65,6 +67,10 @@ public class RevenueServiceImpl implements RevenueService {
   @Override
   public PaginationDTOResponse<RevenueDTOResponse> findByYearAndMonth(
       Integer year, Integer month, Pageable pageable) {
+    if (year == null || month == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year and month must be provided");
+    }
+
     Page<RevenueDTOResponse> revenueDTOResponsePage =
         revenueRepository.findByYearAndMonth(year, month, pageable).map(RevenueDTOResponse::new);
 

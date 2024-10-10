@@ -78,11 +78,13 @@ public class RevenueRepositoryTest {
   @Test
   void findTotalMonthlyRevenue() {
     revenueRepository.save(
-        new Revenue(2L, BigDecimal.valueOf(50), "Birthday dinner", LocalDate.of(2020, 10, 30)));
+        new Revenue(1L, BigDecimal.valueOf(50), "Birthday dinner", LocalDate.of(2020, 10, 30)));
+
+    BigDecimal expectedSum = BigDecimal.valueOf(100);
 
     BigDecimal monthlyRevenue = revenueRepository.findTotalMonthlyRevenue(2020, 10);
 
     assertThat(BigDecimalUtil.roundWithCeiling(monthlyRevenue))
-        .isEqualTo(BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(100)));
+        .isEqualTo(BigDecimalUtil.roundWithCeiling(expectedSum));
   }
 }

@@ -36,9 +36,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
-class ExpenseServiceImplTest {
+public class ExpenseServiceImplTest {
 
-  @InjectMocks private ExpenseServiceImpl expenseService;
+  @InjectMocks private ExpenseServiceImpl expenseServiceImpl;
 
   @Mock private CategoryRepository categoryRepository;
 
@@ -52,7 +52,6 @@ class ExpenseServiceImplTest {
   @BeforeEach
   void setup() {
     defaultCategory = new Category("Other", 1L);
-
     category = new Category("Food", 2L);
 
     request =
@@ -81,7 +80,7 @@ class ExpenseServiceImplTest {
 
     // Act
     PaginationDTOResponse<ExpenseDTOResponse> result =
-        expenseService.findAll(description, pageable);
+        expenseServiceImpl.findAll(description, pageable);
 
     // Assert
     assertNotNull(result);
@@ -101,11 +100,12 @@ class ExpenseServiceImplTest {
 
     // Act & Assert
     DuplicateExpenseException exception =
-        assertThrows(DuplicateExpenseException.class, () -> expenseService.postExpense(request));
+        assertThrows(
+            DuplicateExpenseException.class, () -> expenseServiceImpl.postExpense(request));
 
     // Assert
     assertEquals(
-        "Duplicate entries with an existing description and month are not allowed",
+        "Expense with the given description and transaction date already exists",
         exception.getMessage());
   }
 
@@ -123,7 +123,7 @@ class ExpenseServiceImplTest {
     given(expenseRepository.save(expense)).willReturn(expense);
 
     // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
+    ExpenseDTOResponse response = expenseServiceImpl.postExpense(request);
 
     // Assert
     assertNotNull(response);
@@ -138,7 +138,7 @@ class ExpenseServiceImplTest {
     given(expenseRepository.findById(expenseId)).willReturn(Optional.of(expense));
 
     // Act
-    ExpenseDTOResponse result = expenseService.findById(expenseId);
+    ExpenseDTOResponse result = expenseServiceImpl.findById(expenseId);
 
     // Assert
     assertNotNull(result);
@@ -152,7 +152,6 @@ class ExpenseServiceImplTest {
   @Test
   void givenExistingExpense_whenUpdating_thenReturnExpenseDtoResponseWithUpdatedFields() {
     // Arrange
-    Long existingExpenseId = 1L;
     ExpenseDTORequest updatedExpense =
         new ExpenseDTORequest(
             BigDecimalUtil.roundWithCeiling(BigDecimal.valueOf(200)),
@@ -182,7 +181,7 @@ class ExpenseServiceImplTest {
         assertThrows(
             InvalidCategoryException.class,
             () -> {
-              expenseService.postExpense(request);
+              expenseServiceImpl.postExpense(request);
             });
 
     assertEquals(
@@ -202,7 +201,7 @@ class ExpenseServiceImplTest {
         assertThrows(
             EntityNotFoundException.class,
             () -> {
-              expenseService.findById(expenseId);
+              expenseServiceImpl.findById(expenseId);
             });
 
     assertEquals("Expense not found with id: " + expenseId, exception.getMessage());
@@ -217,7 +216,7 @@ class ExpenseServiceImplTest {
     given(expenseRepository.findAll(pageable)).willReturn(expensePage);
 
     // Act
-    PaginationDTOResponse<ExpenseDTOResponse> result = expenseService.findAll(null, pageable);
+    PaginationDTOResponse<ExpenseDTOResponse> result = expenseServiceImpl.findAll(null, pageable);
 
     // Assert
     assertNotNull(result);
@@ -238,7 +237,7 @@ class ExpenseServiceImplTest {
         assertThrows(
             EntityNotFoundException.class,
             () -> {
-              expenseService.putExpense(request, nonExistingId);
+              expenseServiceImpl.putExpense(request, nonExistingId);
             });
 
     // Assert
@@ -259,7 +258,7 @@ class ExpenseServiceImplTest {
     given(expenseRepository.save(expense)).willReturn(expense);
 
     // Act
-    ExpenseDTOResponse response = expenseService.postExpense(request);
+    ExpenseDTOResponse response = expenseServiceImpl.postExpense(request);
 
     // Assert
     assertNotNull(response);
@@ -276,7 +275,7 @@ class ExpenseServiceImplTest {
     ResponseStatusException exception =
         assertThrows(
             ResponseStatusException.class,
-            () -> expenseService.findByYearAndMonth(null, 10, pageable));
+            () -> expenseServiceImpl.findByYearAndMonth(null, 10, pageable));
 
     assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     assertEquals("Year and month must be provided", exception.getReason());
@@ -284,7 +283,7 @@ class ExpenseServiceImplTest {
     exception =
         assertThrows(
             ResponseStatusException.class,
-            () -> expenseService.findByYearAndMonth(2020, null, pageable));
+            () -> expenseServiceImpl.findByYearAndMonth(2020, null, pageable));
 
     assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     assertEquals("Year and month must be provided", exception.getReason());
@@ -297,7 +296,7 @@ class ExpenseServiceImplTest {
     given(expenseRepository.findById(expenseId)).willReturn(Optional.of(expense));
 
     // Act
-    expenseService.deleteExpense(expenseId);
+    expenseServiceImpl.deleteExpense(expenseId);
 
     // Assert
     then(expenseRepository).should().delete(expense);
@@ -314,7 +313,7 @@ class ExpenseServiceImplTest {
 
     // Act
     PaginationDTOResponse<ExpenseDTOResponse> result =
-        expenseService.findByYearAndMonth(year, month, pageable);
+        expenseServiceImpl.findByYearAndMonth(year, month, pageable);
 
     // Assert
     assertNotNull(result);
