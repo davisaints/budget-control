@@ -7,10 +7,10 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 5432:5432
+      - "5432:5432"
     restart: unless-stopped
 
-  budget-control:
+  budget-control: 
     build: .
     container_name: budget-control
     depends_on:
@@ -21,5 +21,5 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: always
