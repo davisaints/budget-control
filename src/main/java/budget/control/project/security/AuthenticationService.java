@@ -1,7 +1,8 @@
 package budget.control.project.security;
 
-import budget.control.project.dto.request.LoginUserDTO;
-import budget.control.project.dto.request.RegisterUserDTO;
+import budget.control.project.dto.request.LoginUserDTORequest;
+import budget.control.project.dto.request.RegisterUserDTORequest;
+import budget.control.project.dto.response.RegisterUserDTOResponse;
 import budget.control.project.exception.DuplicateUserException;
 import budget.control.project.model.User;
 import budget.control.project.repository.UserRepository;
@@ -28,17 +29,17 @@ public class AuthenticationService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User signup(RegisterUserDTO registerUserDTO) {
-    if (userRepository.findByUsername(registerUserDTO.getUsername()).isPresent()) {
+  public RegisterUserDTOResponse signup(RegisterUserDTORequest registerUserDTORequest) {
+    if (userRepository.findByUsername(registerUserDTORequest.getUsername()).isPresent()) {
       throw new DuplicateUserException(
-          "User with username '" + registerUserDTO.getUsername() + "' already exists");
+          "User with username '" + registerUserDTORequest.getUsername() + "' already exists");
     }
 
     User user =
         new User(
-            registerUserDTO.getUsername(), passwordEncoder.encode(registerUserDTO.getPassword()));
+            registerUserDTORequest.getUsername(), passwordEncoder.encode(registerUserDTORequest.getPassword()));
 
-    return userRepository.save(user);
+    return new RegisterUserDTOResponse(userRepository.save(user));
   }
 
   public User authenticate(LoginUserDTORequest loginUserDTORequest) {

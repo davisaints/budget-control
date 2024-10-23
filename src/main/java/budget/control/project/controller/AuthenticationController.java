@@ -1,11 +1,13 @@
 package budget.control.project.controller;
 
-import budget.control.project.dto.request.LoginUserDTO;
-import budget.control.project.dto.request.RegisterUserDTO;
+import budget.control.project.dto.request.LoginUserDTORequest;
+import budget.control.project.dto.request.RegisterUserDTORequest;
 import budget.control.project.dto.response.LoginResponse;
+import budget.control.project.dto.response.RegisterUserDTOResponse;
 import budget.control.project.model.User;
 import budget.control.project.security.AuthenticationService;
 import budget.control.project.security.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,10 +29,9 @@ public class AuthenticationController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<User> register(@RequestBody RegisterUserDTO registerUserDTO) {
-    User registeredUser = authenticationService.signup(registerUserDTO);
-
-    return ResponseEntity.ok(registeredUser);
+  public ResponseEntity<RegisterUserDTOResponse> register(
+      @RequestBody RegisterUserDTORequest registerUserDTORequest) {
+    return new ResponseEntity<>(authenticationService.signup(registerUserDTORequest), HttpStatus.CREATED);
   }
 
   @PostMapping("/login")
