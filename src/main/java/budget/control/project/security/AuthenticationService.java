@@ -41,11 +41,11 @@ public class AuthenticationService {
     return userRepository.save(user);
   }
 
-  public User authenticate(LoginUserDTO loginUserDTO) {
+  public User authenticate(LoginUserDTORequest loginUserDTORequest) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
-            loginUserDTO.getUsername(), loginUserDTO.getPassword()));
+            loginUserDTORequest.getUsername(), loginUserDTORequest.getPassword()));
 
-    return userRepository.findByUsername(loginUserDTO.getUsername()).orElseThrow();
+    return userRepository.findByUsername(loginUserDTORequest.getUsername()).orElseThrow();
   }
 }

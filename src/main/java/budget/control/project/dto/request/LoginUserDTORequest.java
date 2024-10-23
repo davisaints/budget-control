@@ -2,7 +2,7 @@ package budget.control.project.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginUserDTO {
+public class LoginUserDTORequest {
 
   @NotBlank(message = "Username is mandatory")
   private String username;
