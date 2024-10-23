@@ -1,4 +1,4 @@
-package budget.control.project.configs;
+package budget.control.project.configs.security;
 
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,13 @@ public class SecurityConfiguration {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
+            auth ->
+                auth.requestMatchers("/auth/**")
+                    .permitAll()
+                    .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
@@ -46,7 +52,7 @@ public class SecurityConfiguration {
     CorsConfiguration configuration = new CorsConfiguration();
 
     configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-    configuration.setAllowedMethods(List.of("GET", "POST"));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
