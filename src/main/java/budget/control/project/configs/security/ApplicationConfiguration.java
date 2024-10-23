@@ -1,4 +1,4 @@
-package budget.control.project.configs;
+package budget.control.project.configs.security;
 
 import budget.control.project.repository.UserRepository;
 import org.springframework.context.annotation.Bean;

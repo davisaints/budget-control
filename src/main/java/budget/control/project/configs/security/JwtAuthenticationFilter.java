@@ -1,4 +1,4 @@
-package budget.control.project.configs;
+package budget.control.project.configs.security;
 
 import budget.control.project.security.JwtService;
 import jakarta.servlet.FilterChain;
