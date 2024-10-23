@@ -40,14 +40,13 @@ public class ExpenseServiceImpl implements ExpenseService {
   public PaginationDTOResponse<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
     Page<ExpenseDTOResponse> expenseDTOResponsePage;
 
-    if (description == null) {
-      expenseDTOResponsePage = expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new);
-    } else {
-      expenseDTOResponsePage =
-          expenseRepository
-              .findByDescriptionContaining(description, pageable)
-              .map(ExpenseDTOResponse::new);
-    }
+    expenseDTOResponsePage =
+        (description == null)
+            ? expenseRepository.findAll(pageable).map(ExpenseDTOResponse::new)
+            : expenseRepository
+                .findByDescriptionContaining(description, pageable)
+                .map(ExpenseDTOResponse::new);
+
     return new PaginationDTOResponse<ExpenseDTOResponse>()
         .builder()
         .setContent(expenseDTOResponsePage.getContent())

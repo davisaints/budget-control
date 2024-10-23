@@ -35,14 +35,13 @@ public class RevenueServiceImpl implements RevenueService {
   public PaginationDTOResponse<RevenueDTOResponse> findAll(String description, Pageable pageable) {
     Page<RevenueDTOResponse> revenueDTOResponsePage;
 
-    if (description == null) {
-      revenueDTOResponsePage = revenueRepository.findAll(pageable).map(RevenueDTOResponse::new);
-    } else {
-      revenueDTOResponsePage =
-          revenueRepository
-              .findByDescriptionContaining(description, pageable)
-              .map(RevenueDTOResponse::new);
-    }
+    revenueDTOResponsePage =
+        (description == null)
+            ? revenueRepository.findAll(pageable).map(RevenueDTOResponse::new)
+            : revenueRepository
+                .findByDescriptionContaining(description, pageable)
+                .map(RevenueDTOResponse::new);
+
     return new PaginationDTOResponse<RevenueDTOResponse>()
         .builder()
         .setContent(revenueDTOResponsePage.getContent())
