@@ -2,7 +2,7 @@ package budget.control.project.controller;
 
 import budget.control.project.dto.request.LoginUserDTORequest;
 import budget.control.project.dto.request.RegisterUserDTORequest;
-import budget.control.project.dto.response.LoginResponse;
+import budget.control.project.dto.response.LoginUserDTOResponse;
 import budget.control.project.dto.response.RegisterUserDTOResponse;
 import budget.control.project.model.User;
 import budget.control.project.security.AuthenticationService;
@@ -31,17 +31,20 @@ public class AuthenticationController {
   @PostMapping("/signup")
   public ResponseEntity<RegisterUserDTOResponse> register(
       @RequestBody RegisterUserDTORequest registerUserDTORequest) {
-    return new ResponseEntity<>(authenticationService.signup(registerUserDTORequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        authenticationService.signup(registerUserDTORequest), HttpStatus.CREATED);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDTORequest loginUserDTORequest) {
+  public ResponseEntity<LoginUserDTOResponse> authenticate(
+      @RequestBody LoginUserDTORequest loginUserDTORequest) {
     User authenticatedUser = authenticationService.authenticate(loginUserDTORequest);
 
     String jwtToken = jwtService.generateToken(authenticatedUser);
 
-    LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+    LoginUserDTOResponse loginUserDTOResponse =
+        new LoginUserDTOResponse(jwtToken, jwtService.getExpirationTime());
 
-    return ResponseEntity.ok(loginResponse);
+    return new ResponseEntity<>(loginUserDTOResponse, HttpStatus.OK);
   }
 }

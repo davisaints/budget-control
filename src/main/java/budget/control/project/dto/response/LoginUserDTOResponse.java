@@ -1,12 +1,12 @@
 package budget.control.project.dto.response;
 
-public class LoginResponse {
+public class LoginUserDTOResponse {
 
   private String token;
 
   private long expiresIn;
 
-  public LoginResponse(String token, long expiresIn) {
+  public LoginUserDTOResponse(String token, long expiresIn) {
     this.token = token;
     this.expiresIn = expiresIn;
   }
