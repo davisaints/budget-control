@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@JsonPropertyOrder({"category", "description", "amount", "transactionDate"})
+@JsonPropertyOrder({"id", "category", "description", "amount", "transactionDate"})
 public class ExpenseDTOResponse {
 
   private BigDecimal amount;
@@ -18,12 +18,15 @@ public class ExpenseDTOResponse {
 
   private String description;
 
+  private Long id;
+
   private LocalDate transactionDate;
 
   public ExpenseDTOResponse(Expense expense) {
     this.amount = BigDecimalUtil.roundWithCeiling(expense.getAmount());
     this.category = expense.getCategory();
     this.description = expense.getDescription();
+    this.id = expense.getId();
     this.transactionDate = expense.getTransactionDate();
   }
 
@@ -37,6 +40,10 @@ public class ExpenseDTOResponse {
 
   public String getDescription() {
     return description;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public LocalDate getTransactionDate() {
