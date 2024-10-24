@@ -9,7 +9,6 @@ import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.RevenueService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RevenueServiceImpl implements RevenueService {
 
-  @Autowired private RevenueRepository revenueRepository;
+  private final RevenueRepository revenueRepository;
+
+  public RevenueServiceImpl(RevenueRepository revenueRepository) {
+    this.revenueRepository = revenueRepository;
+  }
 
   @Override
   public void deleteRevenue(Long id) {

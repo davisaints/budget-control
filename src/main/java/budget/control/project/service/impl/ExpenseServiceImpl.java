@@ -13,7 +13,6 @@ import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,14 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
-  @Autowired CategoryRepository categoryRepository;
-  @Autowired ExpenseRepository expenseRepository;
+  private final ExpenseRepository expenseRepository;
+
+  private final CategoryRepository categoryRepository;
+
+  public ExpenseServiceImpl(CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
+    this.expenseRepository = expenseRepository;
+    this.categoryRepository = categoryRepository;
+  }
 
   @Override
   public void deleteExpense(Long id) {

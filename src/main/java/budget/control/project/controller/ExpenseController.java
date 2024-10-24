@@ -6,7 +6,6 @@ import budget.control.project.dto.response.PaginationDTOResponse;
 import budget.control.project.service.ExpenseService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearer-key")
 public class ExpenseController {
 
-  @Autowired ExpenseService expenseService;
+  private final ExpenseService expenseService;
+
+  public ExpenseController(ExpenseService expenseService) {
+    this.expenseService = expenseService;
+  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<String> deleteExpense(@PathVariable Long id) {

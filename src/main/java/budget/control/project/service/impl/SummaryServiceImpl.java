@@ -5,14 +5,19 @@ import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.repository.RevenueRepository;
 import budget.control.project.service.SummaryService;
 import java.math.BigDecimal;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SummaryServiceImpl implements SummaryService {
 
-  @Autowired ExpenseRepository expenseRepository;
-  @Autowired RevenueRepository revenueRepository;
+  private final ExpenseRepository expenseRepository;
+
+  private final RevenueRepository revenueRepository;
+
+  public SummaryServiceImpl(ExpenseRepository expenseRepository, RevenueRepository revenueRepository) {
+    this.expenseRepository = expenseRepository;
+    this.revenueRepository = revenueRepository;
+  }
 
   public MonthlySummaryDTOResponse findMonthlySummary(Integer year, Integer month) {
     BigDecimal totalExpense = expenseRepository.findTotalMonthlyExpense(year, month);

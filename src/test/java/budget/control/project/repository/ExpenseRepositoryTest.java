@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +22,15 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class ExpenseRepositoryTest {
 
-  @Autowired CategoryRepository categoryRepository;
+  private final ExpenseRepository expenseRepository;
 
-  @Autowired ExpenseRepository expenseRepository;
+  private final CategoryRepository categoryRepository;
+
+  public ExpenseRepositoryTest(
+      CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
+    this.expenseRepository = expenseRepository;
+    this.categoryRepository = categoryRepository;
+  }
 
   @BeforeEach
   void setUp() {
