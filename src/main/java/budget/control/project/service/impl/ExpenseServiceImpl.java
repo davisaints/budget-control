@@ -13,6 +13,7 @@ import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   private final CategoryRepository categoryRepository;
 
-  public ExpenseServiceImpl(CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
+  public ExpenseServiceImpl(
+      CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
     this.expenseRepository = expenseRepository;
     this.categoryRepository = categoryRepository;
   }
@@ -41,6 +43,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     expenseRepository.delete(expense);
   }
 
+  @PageableAsQueryParam
   @Override
   public PaginationDTOResponse<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
     Page<ExpenseDTOResponse> expenseDTOResponsePage;
@@ -55,7 +58,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     return new PaginationDTOResponse<ExpenseDTOResponse>()
         .builder()
         .setContent(expenseDTOResponsePage.getContent())
-        .setPage(expenseDTOResponsePage.getNumber() + 1)
+        .setPage(expenseDTOResponsePage.getNumber())
         .setSize(expenseDTOResponsePage.getSize())
         .setTotalElements(expenseDTOResponsePage.getTotalElements())
         .setTotalPages(expenseDTOResponsePage.getTotalPages())
@@ -86,7 +89,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     return new PaginationDTOResponse<ExpenseDTOResponse>()
         .builder()
         .setContent(expenseDTOResponsePage.getContent())
-        .setPage(expenseDTOResponsePage.getNumber() + 1)
+        .setPage(expenseDTOResponsePage.getNumber())
         .setSize(expenseDTOResponsePage.getSize())
         .setTotalElements(expenseDTOResponsePage.getTotalElements())
         .setTotalPages(expenseDTOResponsePage.getTotalPages())

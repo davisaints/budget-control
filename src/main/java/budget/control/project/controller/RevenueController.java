@@ -4,10 +4,12 @@ import budget.control.project.dto.request.RevenueDTORequest;
 import budget.control.project.dto.response.PaginationDTOResponse;
 import budget.control.project.dto.response.RevenueDTOResponse;
 import budget.control.project.service.RevenueService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +33,10 @@ public class RevenueController {
     return ResponseEntity.ok().build();
   }
 
+  @PageableAsQueryParam
   @GetMapping
   public ResponseEntity<PaginationDTOResponse<RevenueDTOResponse>> findAllRevenues(
-      @PageableDefault(sort = {"date"}) String description, Pageable pageable) {
+      @Nullable String description, @Parameter(hidden = true) Pageable pageable) {
     return new ResponseEntity<>(revenueService.findAll(description, pageable), HttpStatus.OK);
   }
 
@@ -42,9 +45,12 @@ public class RevenueController {
     return new ResponseEntity<>(revenueService.findById(id), HttpStatus.OK);
   }
 
+  @PageableAsQueryParam
   @GetMapping("/{year}/{month}")
   public ResponseEntity<PaginationDTOResponse<RevenueDTOResponse>> findRevenueByYearAndMonth(
-      @PathVariable Integer year, @PathVariable Integer month, Pageable pageable) {
+      @PathVariable Integer year,
+      @PathVariable Integer month,
+      @Parameter(hidden = true) Pageable pageable) {
     return new ResponseEntity<>(
         revenueService.findByYearAndMonth(year, month, pageable), HttpStatus.OK);
   }
