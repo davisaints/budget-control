@@ -12,25 +12,20 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
 @ActiveProfiles("test")
+@DataJpaTest
 public class ExpenseRepositoryTest {
 
-  private final ExpenseRepository expenseRepository;
+  @Autowired private ExpenseRepository expenseRepository;
 
-  private final CategoryRepository categoryRepository;
-
-  public ExpenseRepositoryTest(
-      CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
-    this.expenseRepository = expenseRepository;
-    this.categoryRepository = categoryRepository;
-  }
+  @Autowired private CategoryRepository categoryRepository;
 
   @BeforeEach
   void setUp() {

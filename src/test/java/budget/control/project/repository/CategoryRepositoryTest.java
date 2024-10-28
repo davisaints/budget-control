@@ -2,30 +2,19 @@ package budget.control.project.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import budget.control.project.model.Category;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
 @ActiveProfiles("test")
+@DataJpaTest
 public class CategoryRepositoryTest {
 
-  private final CategoryRepository categoryRepository;
-
-  public CategoryRepositoryTest(CategoryRepository categoryRepository) {
-    this.categoryRepository = categoryRepository;
-  }
-
-  @BeforeEach
-  void setUp() {
-    if (categoryRepository.findByName("Food") == null) {
-      categoryRepository.save(new Category("Food"));
-    }
-  }
+  @Autowired
+  private CategoryRepository categoryRepository;
 
   @AfterEach
   void tearDown() {

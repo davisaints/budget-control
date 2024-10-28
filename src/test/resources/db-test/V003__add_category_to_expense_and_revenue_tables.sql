@@ -1,4 +1,12 @@
-ALTER TABLE expense
-ADD COLUMN category_id INT NOT NULL;
+SELECT
+    COUNT(*)
+FROM
+    INFORMATION_SCHEMA.COLUMNS
+WHERE
+    TABLE_NAME = 'EXPENSE'
+    AND COLUMN_NAME = 'CATEGORY_ID';
 
-ALTER TABLE expense ADD CONSTRAINT fk_expense_category FOREIGN KEY (category_id) REFERENCES category (id);
+ALTER TABLE expense
+ADD COLUMN IF NOT EXISTS category_id INT NOT NULL;
+
+ALTER TABLE expense ADD CONSTRAINT IF NOT EXISTS fk_expense_category FOREIGN KEY (category_id) REFERENCES category (id);
