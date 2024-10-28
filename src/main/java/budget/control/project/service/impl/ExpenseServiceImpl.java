@@ -12,8 +12,8 @@ import budget.control.project.repository.ExpenseRepository;
 import budget.control.project.service.ExpenseService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,6 @@ public class ExpenseServiceImpl implements ExpenseService {
     expenseRepository.delete(expense);
   }
 
-  @PageableAsQueryParam
   @Override
   public PaginationDTOResponse<ExpenseDTOResponse> findAll(String description, Pageable pageable) {
     Page<ExpenseDTOResponse> expenseDTOResponsePage;
@@ -106,9 +105,11 @@ public class ExpenseServiceImpl implements ExpenseService {
           "Expense with the given description and transaction date already exists");
     }
 
-    validateCategory(expenseDTORequest);
+    Category category = validateCategory(expenseDTORequest.getCategoryName());
 
-    Expense expense = expenseRepository.save(new Expense(expenseDTORequest));
+    Expense expense = expenseRepository.save(new Expense(expenseDTORequest, category));
+
+    expense.setCategory(category);
 
     return new ExpenseDTOResponse(expense);
   }
@@ -129,37 +130,33 @@ public class ExpenseServiceImpl implements ExpenseService {
           "An expense with the same description and month already exists");
     }
 
-    validateCategory(expenseDTORequest);
+    Category category = validateCategory(expenseDTORequest.getCategoryName());
 
-    existingExpense.update(expenseDTORequest, expenseDTORequest.getCategory());
+    existingExpense.update(expenseDTORequest, category);
 
     expenseRepository.save(existingExpense);
 
     return new ExpenseDTOResponse(existingExpense);
   }
 
-  private void validateCategory(ExpenseDTORequest expenseDTORequest) {
-    String categoryName = expenseDTORequest.getCategoryName();
-
+  private Category validateCategory(String categoryName) {
     if (categoryName == null || categoryName.isEmpty()) {
-      expenseDTORequest.setCategory(categoryRepository.findByName("Other"));
-      return;
+      return categoryRepository.findByName("Other");
     }
 
-    categoryRepository
-        .findByNameIgnoreCase(categoryName)
-        .ifPresentOrElse(
-            expenseDTORequest::setCategory,
-            () -> {
-              String validCategories =
-                  categoryRepository.findAll().stream()
-                      .map(Category::getName)
-                      .collect(Collectors.joining(", "));
-              throw new InvalidCategoryException(
-                  "Invalid category: "
-                      + categoryName
-                      + ". Valid categories are: "
-                      + validCategories);
-            });
+    Optional<Category> category = categoryRepository.findByNameIgnoreCase(categoryName);
+
+    if (category.isEmpty()) {
+      String validCategories =
+          categoryRepository.findAll().stream()
+              .map(Category::getName)
+              .collect(Collectors.joining(", "));
+
+      throw new InvalidCategoryException(
+          String.format(
+              "Invalid category: '%s'. Valid categories are: %s", categoryName, validCategories));
+    }
+
+    return category.get();
   }
 }

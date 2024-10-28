@@ -1,6 +1,5 @@
 package budget.control.project.dto.response;
 
-import budget.control.project.model.Category;
 import budget.control.project.model.Expense;
 import budget.control.project.utils.BigDecimalUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,7 +13,7 @@ public class ExpenseDTOResponse {
   private BigDecimal amount;
 
   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Category category;
+  private String categorName;
 
   private String description;
 
@@ -24,7 +23,7 @@ public class ExpenseDTOResponse {
 
   public ExpenseDTOResponse(Expense expense) {
     this.amount = BigDecimalUtil.roundWithCeiling(expense.getAmount());
-    this.category = expense.getCategory();
+    this.categorName = expense.getCategory().getName();
     this.description = expense.getDescription();
     this.id = expense.getId();
     this.transactionDate = expense.getTransactionDate();
@@ -34,8 +33,8 @@ public class ExpenseDTOResponse {
     return amount;
   }
 
-  public Category getCategory() {
-    return category;
+  public String getCategoryName() {
+    return categorName;
   }
 
   public String getDescription() {

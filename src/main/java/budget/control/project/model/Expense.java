@@ -26,24 +26,11 @@ public class Expense {
   @Column(name = "transaction_date")
   private LocalDate transactionDate;
 
-  public Expense(ExpenseDTORequest expenseDTORequest) {
+  public Expense(ExpenseDTORequest expenseDTORequest, Category category) {
     this.amount = BigDecimalUtil.roundWithCeiling(expenseDTORequest.getAmount());
-    this.category = expenseDTORequest.getCategory();
+    this.category = category;
     this.description = expenseDTORequest.getDescription();
     this.transactionDate = expenseDTORequest.getTransactionDate();
-  }
-
-  public Expense(
-      Long id,
-      BigDecimal amount,
-      Category category,
-      String description,
-      LocalDate transactionDate) {
-    this.id = id;
-    this.amount = BigDecimalUtil.roundWithCeiling(amount);
-    this.category = category;
-    this.description = description;
-    this.transactionDate = transactionDate;
   }
 
   public Expense() {}
@@ -85,6 +72,14 @@ public class Expense {
     if (o == null || getClass() != o.getClass()) return false;
     Expense expense = (Expense) o;
     return Objects.equals(id, expense.id);
+  }
+
+  public Expense(Long id, BigDecimal amount, Category category, String description, LocalDate transactionDate) {
+    this.id = id;
+    this.amount = amount;
+    this.category = category;
+    this.description = description;
+    this.transactionDate = transactionDate;
   }
 
   @Override

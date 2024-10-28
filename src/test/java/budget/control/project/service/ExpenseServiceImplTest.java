@@ -61,7 +61,7 @@ public class ExpenseServiceImplTest {
             "Lunch",
             LocalDate.of(2020, 10, 10));
 
-    expense = new Expense(request);
+    expense = new Expense(request, category);
   }
 
   @AfterEach
@@ -127,7 +127,7 @@ public class ExpenseServiceImplTest {
 
     // Assert
     assertNotNull(response);
-    assertEquals(defaultCategory, response.getCategory());
+    assertEquals(defaultCategory.getName(), response.getCategoryName());
     then(categoryRepository).should().findByName("Other");
   }
 
@@ -143,7 +143,7 @@ public class ExpenseServiceImplTest {
     // Assert
     assertNotNull(result);
     assertEquals(expense.getAmount(), result.getAmount());
-    assertEquals(expense.getCategory(), result.getCategory());
+    assertEquals(expense.getCategory().getName(), result.getCategoryName());
     assertEquals(expense.getDescription(), result.getDescription());
     assertEquals(expense.getTransactionDate(), result.getTransactionDate());
     then(expenseRepository).should().findById(expenseId);
@@ -185,9 +185,9 @@ public class ExpenseServiceImplTest {
             });
 
     assertEquals(
-        "Invalid category: " + request.getCategoryName() + ". Valid categories are: ",
+        "Invalid category: '" + request.getCategoryName() + "'. Valid categories are: ",
         exception.getMessage());
-    then(expenseRepository).should(never()).save(new Expense(request));
+    then(expenseRepository).should(never()).save(new Expense());
   }
 
   @Test
@@ -262,7 +262,7 @@ public class ExpenseServiceImplTest {
 
     // Assert
     assertNotNull(response);
-    assertEquals(defaultCategory, response.getCategory());
+    assertEquals(defaultCategory.getName(), response.getCategoryName());
     then(categoryRepository).should().findByName("Other");
   }
 
