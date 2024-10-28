@@ -66,7 +66,7 @@ Before you begin, ensure you have the following installed:
 
 ### PostgreSQL Database Setup
 
-The project uses PostgreSQL 14.5. You can either install it on your machine or use Docker to run a container. To set up using Docker, run the following command:
+The project uses PostgreSQL 14.5. To set up using Docker, run the following command:
 
 ```bash
 docker run --name localhost_postgresql -d \
@@ -105,6 +105,6 @@ mvn spring-boot:run
 
 Once the application is running, you can access the API documentation via Swagger UI at:
 
-http://localhost:8080/swagger-ui
+http://localhost:8080/swagger-ui/index.html
 
 This interface provides an easy way to test the API endpoints, view documentation, and interact with the application.
