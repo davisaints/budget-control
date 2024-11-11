@@ -8,7 +8,7 @@ The **Budget Control API** is an interface that helps users manage their finance
 
 - **Java 17**
 - **Spring Boot 3.3.4**
-- **PostgreSQL** (database)
+- **PostgreSQL**
 
 ## API Endpoints
 
