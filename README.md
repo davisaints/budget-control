@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Budget Control API** is an interface that helps users manage their finances by tracking revenue and expenses, enabling them to generate monthly financial summaries.
+The **Budget Control API** helps track income and expenses and generates monthly summaries.
 
 ## Technologies
 
