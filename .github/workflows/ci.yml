@@ -36,4 +36,4 @@ jobs:
           cache: maven
 
       - name: Build and Run Tests
-        run: mvn clean verify
+        run: mvn clean verify --quiet
